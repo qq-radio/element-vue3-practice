@@ -1,18 +1,208 @@
 <template>
-  <el-config-provider namespace="ep">
+  <el-config-provider>
     <BaseHeader />
+    <div class="text-red text-[28px] bold">
+      当前只关注————form.d.ts form-item.dts
+      <div></div>
+    </div>
     <div class="flex main-container">
       <BaseSide />
       <div w="full" m="1.5" bg-white>
-        <BasicTable msg="Hello Vue 3 + Element Plus + Vite" />
+        <!-- <BasicTable /> -->
+        <BasicForm
+          v-model="state"
+          :schema="schema"
+          :rules="rules"
+          @change="handleChange"
+          @submit="handleSubmit"
+          @reset="handleReset"
+        />
       </div>
     </div>
   </el-config-provider>
 </template>
 
+<script setup lang="ts">
+import { FormSchemaItem } from '@/components/basic-form'
+
+const state = ref({
+  status: '0',
+  name: '',
+  rate: 2,
+  progress: 100,
+  switch: true,
+  time: new Date().toString(),
+  endTime: [],
+  img: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+})
+
+const rules = {
+  tag: [],
+}
+
+const schema: FormSchemaItem[] = [
+  {
+    label: '名称',
+    prop: 'name',
+    component: 'input',
+    rules: [
+      {
+        required: true,
+        message: '请输入名称111',
+      },
+    ],
+  },
+  {
+    label: '标题',
+    prop: 'name',
+    component: 'sub-title',
+  },
+  {
+    label: '名称',
+    prop: 'name',
+    component: 'input',
+    hasLabel: false,
+    rules: [
+      {
+        required: true,
+        message: '请输入名称111',
+      },
+    ],
+  },
+  {
+    label: '√状态select',
+    prop: 'tag',
+    component: 'select',
+    rules: [
+      {
+        required: true,
+        message: '请输入标签',
+      },
+    ],
+    componentProps: {
+      options: [
+        {
+          label: '未解决',
+          value: '0',
+          color: 'red',
+        },
+        {
+          label: '已解决',
+          value: '1',
+          color: 'blue',
+        },
+        {
+          label: '解决中',
+          value: '2',
+          color: 'yellow',
+        },
+        {
+          label: '失败',
+          value: '3',
+          color: 'red',
+        },
+      ],
+    },
+  },
+  {
+    label: '评分',
+    prop: 'rate',
+    component: 'rate',
+  },
+  {
+    label: '是否显示',
+    prop: 'switch',
+    component: 'switch',
+  },
+  {
+    label: '时间',
+    prop: 'time',
+    component: 'date-picker',
+  },
+  {
+    label: '数量',
+    prop: 'number',
+    component: 'input-number',
+  },
+  {
+    label: '√要求',
+    prop: 'demand',
+    component: 'checkbox',
+    componentProps: {
+      options: [
+        {
+          label: '四六级',
+          value: '0',
+        },
+        {
+          label: '计算机二级证书',
+          value: '1',
+        },
+        {
+          label: '普通话证书',
+          value: '2',
+        },
+      ],
+    },
+  },
+  {
+    label: '梦想',
+    prop: 'gift',
+    component: 'radio',
+    componentProps: {
+      options: [
+        {
+          label: '诗',
+          value: '0',
+        },
+        {
+          label: '远方',
+          value: '1',
+        },
+        {
+          label: '美食',
+          value: '2',
+        },
+      ],
+    },
+  },
+  {
+    label: '到期时间',
+    prop: 'endTime',
+    component: 'date-picker',
+    componentProps: {
+      type: 'datetimerange',
+      startPlaceholder: '请选择开始时间',
+      endPlaceholder: '请选择结束时间',
+    },
+  },
+  {
+    label: '说明',
+    prop: 'desc',
+    component: 'textarea',
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+]
+
+const handleChange = (values: Recordable) => {
+  console.log('值改变 change', values)
+}
+
+const handleSubmit = (values: Recordable) => {
+  console.log('表单提交', values)
+}
+
+const handleReset = () => {
+  console.log('重置表单', 'handleReset')
+}
+</script>
+
 <style>
 #app {
-  text-align: center;
   color: var(--ep-text-color-primary);
   background: #f0f2f5;
 }

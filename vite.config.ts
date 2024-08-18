@@ -2,6 +2,7 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
+import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
@@ -20,18 +21,27 @@ const pathSrc = path.resolve(__dirname, 'src')
 export default defineConfig({
   resolve: {
     alias: {
-      '~/': `${pathSrc}/`,
+      '@/': `${pathSrc}/`,
     },
   },
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "~/styles/element/index.scss" as *;`,
+        additionalData: `@use "@/styles/element/index.scss" as *;`,
       },
     },
   },
   plugins: [
     vue(),
+
+    AutoImport({
+      imports: ['vue'],
+      eslintrc: {
+        enabled: true,
+      },
+      resolvers: [ElementPlusResolver()],
+    }),
+
     Components({
       // allow auto load markdown components under `./src/components/`
       extensions: ['vue', 'md'],
@@ -42,7 +52,7 @@ export default defineConfig({
           importStyle: 'sass',
         }),
       ],
-      dts: 'src/components.d.ts',
+      dts: 'components.d.ts',
     }),
 
     // https://github.com/antfu/unocss
@@ -56,10 +66,7 @@ export default defineConfig({
           warn: true,
         }),
       ],
-      transformers: [
-        transformerDirectives(),
-        transformerVariantGroup(),
-      ]
+      transformers: [transformerDirectives(), transformerVariantGroup()],
     }),
   ],
 })
