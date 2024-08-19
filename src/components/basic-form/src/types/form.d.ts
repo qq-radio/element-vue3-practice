@@ -9,21 +9,23 @@ export type ElementPlusComponentType =
   | 'input'
   | 'input-number'
   | 'textarea'
+  | 'checkbox'
+  | 'tree-select'
+  | 'cascader'
+  | 'transfer'
   | 'date-picker'
   | 'time-picker'
-  | 'radio-group'
-  | 'checkbox'
-  | 'checkbox-group'
-  | 'select'
-  | 'tree-select'
   | 'switch'
   | 'rate'
   | 'slider'
-  | 'transfer'
-  | 'cascader'
   | 'color-picker'
 
-export type CustomComponentType = 'title' | 'upload'
+export type CustomComponentType =
+  | 'title'
+  | 'radio-group'
+  | 'checkbox-group'
+  | 'select'
+  | 'upload'
 
 export type ComponentType = ElementPlusComponentType | CustomComponentType
 
