@@ -61,24 +61,21 @@
 </template>
 
 <script lang="ts" setup>
-import type {
-  BasicFormProps,
-  BasicFormEmits,
-  FormSchemaItem,
-} from './types/form'
+import type { FormProps, FormEmits, FormSchema, FormAction } from './types/form'
 import type { FormInstance } from 'element-plus'
 
 import { getComponent } from './tools/component'
 import { isFunction, isUndefined } from '@/utils/is'
+import { merge } from 'lodash-es'
 
 defineOptions({
   name: 'BasicForm',
   inheritAttrs: false,
 })
 
-const props = withDefaults(defineProps<BasicFormProps>(), {
+const props = withDefaults(defineProps<FormProps>(), {
   model: () => ({}),
-  schema: () => [],
+  schemas: () => [],
   loading: false,
 
   rowProps: () => ({}),
@@ -98,21 +95,30 @@ const props = withDefaults(defineProps<BasicFormProps>(), {
   hasErrorTip: true,
 })
 
-const emits = defineEmits<BasicFormEmits>()
+const emits = defineEmits<FormEmits>()
 
 const formInstance = ref<FormInstance>()
-const formSchema = ref<FormSchemaItem[]>([])
+const formProps = ref<Partial<FormProps>>()
+const formSchema = ref<FormSchema[]>([])
 const formModel = ref<Recordable>({})
 const defaultFormModel = ref<Recordable>({})
-
-watchEffect(() => {
-  formSchema.value = props.schema
-  formModel.value = props.model
-  defaultFormModel.value = setDefaultFormModel(props.schema)
+const getProps = computed(() => {
+  return { ...props, ...unref(formProps) } as FormProps
 })
 
-function setDefaultFormModel(schema: FormSchemaItem[]) {
-  return schema.reduce(
+watchEffect(() => {
+  formSchema.value = getProps.value.schemas
+  formModel.value = getProps.value.model || {}
+  defaultFormModel.value = setDefaultFormModel(getProps.value.schemas)
+})
+
+function setProps(props: Partial<FormProps>) {
+  console.log('props: 所有有么有拿到值', props)
+  formProps.value = merge(unref(formProps) || {}, props)
+}
+
+function setDefaultFormModel(schemas: FormSchema[]) {
+  return schemas.reduce(
     (acc, cur) =>
       cur.defaultValue
         ? {
@@ -124,7 +130,7 @@ function setDefaultFormModel(schema: FormSchemaItem[]) {
   )
 }
 
-function getVIf(schemaItem: FormSchemaItem) {
+function getVIf(schemaItem: FormSchema) {
   const { vIf } = schemaItem
 
   if (isUndefined(vIf)) {
@@ -136,25 +142,25 @@ function getVIf(schemaItem: FormSchemaItem) {
   }
 }
 
-function getColProps(schemaItem: FormSchemaItem) {
+function getColProps(schemaItem: FormSchema) {
   return schemaItem.colProps || props.colProps
 }
 
-function getLabel(schemaItem: FormSchemaItem) {
+function getLabel(schemaItem: FormSchema) {
   const hasLabel = isUndefined(schemaItem.hasLabel)
     ? props.hasLabel
     : schemaItem.hasLabel
   return hasLabel ? schemaItem.label : ''
 }
 
-function getVIfMax(schemaItem: FormSchemaItem) {
+function getVIfMax(schemaItem: FormSchema) {
   return (
     (schemaItem.component === 'input' || schemaItem.component === 'textarea') &&
     schemaItem.max
   )
 }
 
-function getMaxLimitText(schemaItem: FormSchemaItem) {
+function getMaxLimitText(schemaItem: FormSchema) {
   return (
     ((formModel.value[schemaItem.prop] as string)?.length || 0) +
     '/' +
@@ -162,7 +168,7 @@ function getMaxLimitText(schemaItem: FormSchemaItem) {
   )
 }
 
-const onChange = (e: unknown, schemaItem: FormSchemaItem) => {
+const onChange = (e: unknown, schemaItem: FormSchema) => {
   emits('change', e, schemaItem)
 }
 
@@ -181,4 +187,16 @@ const handleSubmit = async () => {
   }
   return false
 }
+
+const formActionType: FormAction = {
+  setProps,
+}
+
+defineExpose({
+  ...formActionType,
+})
+
+onMounted(() => {
+  emits('register', formActionType)
+})
 </script>

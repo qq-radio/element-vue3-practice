@@ -2,17 +2,16 @@
   <el-config-provider>
     <BaseHeader />
     <div class="text-red text-[28px] bold">
-      当前只关注————form.d.ts form-item.dts
+      当前只关注————form.d.ts form-item.dts ??
       <div></div>
     </div>
     <div class="flex main-container">
       <BaseSide />
       <div w="full" m="1.5" bg-white>
-        <!-- <BasicTable /> -->
+        {{ formModel }}
         <BasicForm
-          v-model="state"
-          :schema="schema"
-          :rules="rules"
+          v-model="formModel"
+          @register="registerForm"
           @change="handleChange"
           @submit="handleSubmit"
           @reset="handleReset"
@@ -23,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import { FormSchemaItem } from '@/components/basic-form'
+import { FormSchema, useForm } from '@/components/basic-form'
 
-const state = ref({
+const formModel = ref({
   status: '0',
   name: '',
   rate: 2,
@@ -36,11 +35,7 @@ const state = ref({
   img: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
 })
 
-const rules = {
-  tag: [],
-}
-
-const schema: FormSchemaItem[] = [
+const schemas: FormSchema[] = [
   {
     label: '名称',
     prop: 'name',
@@ -54,12 +49,12 @@ const schema: FormSchemaItem[] = [
   },
   {
     label: '标题',
-    prop: 'name',
+    prop: 'nameee',
     component: 'sub-title',
   },
   {
     label: '名称',
-    prop: 'name',
+    prop: 'nameeeee',
     component: 'input',
     hasLabel: false,
     rules: [
@@ -187,6 +182,12 @@ const schema: FormSchemaItem[] = [
     },
   },
 ]
+
+const [registerForm, methods] = useForm({
+  schemas,
+})
+
+console.log('methods:', methods)
 
 const handleChange = (values: Recordable) => {
   console.log('值改变 change', values)
