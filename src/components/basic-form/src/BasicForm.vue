@@ -6,6 +6,7 @@
     :label-suffix="labelSuffix"
     :model="formModel"
   >
+    {{ formModel }} ??
     <el-row v-bind="rowProps">
       <template v-for="schemaItem in formSchema">
         <template v-if="schemaItem.component === 'title'">
@@ -102,6 +103,7 @@ const formProps = ref<Partial<FormProps>>()
 const formSchema = ref<FormSchema[]>([])
 const formModel = ref<Recordable>({})
 const defaultFormModel = ref<Recordable>({})
+
 const getProps = computed(() => {
   return { ...props, ...unref(formProps) } as FormProps
 })
@@ -113,7 +115,6 @@ watchEffect(() => {
 })
 
 function setProps(props: Partial<FormProps>) {
-  console.log('props: 所有有么有拿到值', props)
   formProps.value = merge(unref(formProps) || {}, props)
 }
 

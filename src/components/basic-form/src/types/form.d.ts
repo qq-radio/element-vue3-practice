@@ -23,7 +23,7 @@ export type ElementPlusComponentType =
   | 'color-picker'
 
 export type CustomComponentType =
-  | 'title'
+  | 'sub-title'
   | 'radio-group'
   | 'checkbox-group'
   | 'select'
@@ -40,12 +40,14 @@ export interface FormSchema {
   componentListeners?: Recordable<() => void>
   slot?: string
 
+  sort?: number
   colProps?: Partial<Mutable<ColProps>>
   formItemProps?: Partial<Mutable<FormItemProps>>
 
   required?: boolean
   min?: number
   max?: number
+  noWhitespace?: number
   rules?: FormItemRule[]
 
   hasLabel?: boolean
@@ -84,9 +86,6 @@ export interface FormEmits {
   (e: 'reset', values: Props['model']): void
 }
 
-export type Register = (formInstance: FormAction) => void
-
-// 我觉得下面这些其实都不需要promise 我先写 之后测试 如果确实不需要就删掉
 export interface FormAction {
   setProps: (formProps: Partial<FormProps>) => void
 
@@ -112,5 +111,3 @@ export interface FormAction {
   reset: () => void
   submit: () => void
 }
-
-export type UseFormReturn = [Register, FormAction]

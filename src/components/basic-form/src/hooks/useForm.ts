@@ -1,10 +1,9 @@
-import type {
-  FormProps,
-  FormAction,
-  UseFormReturn,
-  FormSchema,
-} from '../types/form'
+import type { FormProps, FormAction, FormSchema } from '../types/form'
 import type { FormValidateCallback, FormItemProp } from 'element-plus'
+
+export type Register = (formInstance: FormAction) => void
+
+type UseFormReturn = [Register, FormAction]
 
 export function useForm(props?: FormProps): UseFormReturn {
   const formRef = ref<Nullable<FormAction>>(null)
@@ -12,7 +11,7 @@ export function useForm(props?: FormProps): UseFormReturn {
   function getForm() {
     const form = unref(formRef)
     if (!form) {
-      new Error(
+      throw new Error(
         'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation'
       )
     }
@@ -62,6 +61,7 @@ export function useForm(props?: FormProps): UseFormReturn {
     },
 
     getFieldsValue: () => {
+      console.log('getForm():', getForm())
       return getForm().getFieldsValue() || {}
     },
 

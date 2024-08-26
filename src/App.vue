@@ -8,10 +8,16 @@
     <div class="flex main-container">
       <BaseSide />
       <div w="full" m="1.5" bg-white>
-        {{ formModel }}
         <BasicForm
           v-model="formModel"
           @register="registerForm"
+          @change="handleChange"
+          @submit="handleSubmit"
+          @reset="handleReset"
+        />
+        ???
+        <BasicForm
+          @register="registerFormTwo"
           @change="handleChange"
           @submit="handleSubmit"
           @reset="handleReset"
@@ -143,7 +149,7 @@ const schemas: FormSchema[] = [
   {
     label: '梦想',
     prop: 'gift',
-    component: 'radio',
+    component: 'radio-group',
     componentProps: {
       options: [
         {
@@ -183,11 +189,34 @@ const schemas: FormSchema[] = [
   },
 ]
 
-const [registerForm, methods] = useForm({
+const [registerForm] = useForm({
   schemas,
 })
 
-console.log('methods:', methods)
+const schema2: FormSchema[] = [
+  {
+    label: '说明-1',
+    prop: 'desc1',
+    component: 'textarea',
+    rules: [
+      {
+        required: true,
+        message: '请输入标签',
+      },
+    ],
+  },
+  {
+    label: '说明-2',
+    prop: 'desc22',
+    component: 'textarea',
+  },
+]
+
+const [registerFormTwo] = useForm({
+  schemas: schema2,
+})
+
+// console.log('methods:', methods)
 
 const handleChange = (values: Recordable) => {
   console.log('值改变 change', values)
