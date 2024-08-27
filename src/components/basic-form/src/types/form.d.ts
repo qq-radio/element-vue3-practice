@@ -5,109 +5,114 @@ import type {
   FormItemRule,
   FormValidateCallback,
   FormItemProp,
-} from "element-plus";
+} from 'element-plus'
 
 export type ElementPlusComponentType =
-  | "input"
-  | "input-number"
-  | "textarea"
-  | "checkbox"
-  | "tree-select"
-  | "cascader"
-  | "transfer"
-  | "date-picker"
-  | "time-picker"
-  | "switch"
-  | "rate"
-  | "slider"
-  | "color-picker";
+  | 'input'
+  | 'input-number'
+  | 'textarea'
+  | 'checkbox'
+  | 'tree-select'
+  | 'cascader'
+  | 'transfer'
+  | 'date-picker'
+  | 'time-picker'
+  | 'switch'
+  | 'rate'
+  | 'slider'
+  | 'color-picker'
 
 export type CustomComponentType =
-  | "sub-title"
-  | "radio-group"
-  | "checkbox-group"
-  | "select"
-  | "upload";
+  | 'sub-title'
+  | 'radio-group'
+  | 'checkbox-group'
+  | 'select'
+  | 'upload'
 
-export type ComponentType = ElementPlusComponentType | CustomComponentType;
+export type ComponentType = ElementPlusComponentType | CustomComponentType
 
 export interface FormSchema {
-  label: string;
-  prop: string;
-  defaultValue?: string;
-  component: ComponentType;
-  componentProps?: Recordable<unknown>;
-  componentListeners?: Recordable<() => void>;
-  slot?: string;
+  label: string
+  prop: string
+  defaultValue?: string
+  component: ComponentType
+  componentProps?: Recordable<unknown>
+  componentListeners?: Recordable<() => void>
+  slot?: string
 
-  sort?: number;
-  colProps?: Partial<Mutable<ColProps>>;
-  formItemProps?: Partial<Mutable<FormItemProps>>;
+  sort?: number
+  colProps?: Partial<Mutable<ColProps>>
+  formItemProps?: Partial<Mutable<FormItemProps>>
 
-  required?: boolean;
-  min?: number;
-  max?: number;
-  noWhitespace?: number;
-  rules?: FormItemRule[];
+  required?: boolean
+  min?: number
+  max?: number
+  noWhitespace?: number
+  rules?: FormItemRule[]
 
-  hasLabel?: boolean;
-  hidden?: boolean;
-  vIf?: (model: Recordable, schemaItem: FormSchema) => boolean;
+  hasLabel?: boolean
+  hidden?: boolean
+  vIf?: (model: Recordable, schemaItem: FormSchema) => boolean
 }
 
 export interface FormProps {
-  model?: Recordable;
-  schemas: FormSchema[];
-  loading?: boolean;
+  model?: Recordable
+  schemas: FormSchema[]
+  loading?: boolean
 
-  rowProps?: Partial<Mutable<RowProps>>;
-  colProps?: Partial<Mutable<ColProps>>;
-  formItemProps?: Partial<Mutable<FormItemProps>>;
+  rowProps?: Partial<Mutable<RowProps>>
+  colProps?: Partial<Mutable<ColProps>>
+  formItemProps?: Partial<Mutable<FormItemProps>>
 
-  hasLabel?: boolean;
-  labelSuffix?: string;
-  labelWidth?: string | number;
-  labelPosition?: "left" | "right" | "top";
+  hasLabel?: boolean
+  labelSuffix?: string
+  labelWidth?: string | number
+  labelPosition?: 'left' | 'right' | 'top'
 
-  hasFooter?: boolean;
-  hasReset?: boolean;
-  resetText?: string;
-  submitText?: string;
-  footerAlign?: "left" | "right" | "center";
+  hasFooter?: boolean
+  hasReset?: boolean
+  resetText?: string
+  submitText?: string
+  footerAlign?: 'left' | 'right' | 'center'
 
-  hasErrorTip?: boolean;
+  hasErrorTip?: boolean
+
+  // interface data -> form model
+  modelAdaptee?: (model: Recordable) => Recordable
+  // form model -> interface data
+  modelAdapter?: (model: Recordable) => Recordable
 }
 
 export interface FormEmits {
-  (e: "register", e: FormAction): void;
-  (e: "update:modelValue", values: Props["model"]): void;
-  (e: "change", e: unknown, schemaItem: FormSchema): void;
-  (e: "submit", values: Props["model"]): void;
-  (e: "reset", values: Props["model"]): void;
+  (e: 'register', e: FormAction): void
+  (e: 'update:modelValue', values: Props['model']): void
+  (e: 'change', e: unknown, schemaItem: FormSchema): void
+  (e: 'submit', values: Props['model']): void
+  (e: 'reset', values: Props['model']): void
 }
 
 export interface FormAction {
-  setProps: (formProps: Partial<FormProps>) => void;
+  setProps: (formProps: Partial<FormProps>) => void
 
-  updateSchema: (schemas: Partial<FormSchema> | Partial<FormSchema>[]) => void;
+  updateSchema: (schemas: Partial<FormSchema> | Partial<FormSchema>[]) => void
   appendSchema: (
     schemas: FormSchema | FormSchema[],
     previousProp: string | undefined
-  ) => void;
-  removeSchema: (fields: string | string[]) => void;
+  ) => void
+  removeSchema: (fields: string | string[]) => void
 
-  getFieldsValue: () => Recordable;
-  setFieldsValue: (values: Recordable) => void;
+  getFieldsValue: () => Recordable
+  setFieldsValue: (values: Recordable) => void
 
-  validate: (callback?: FormValidateCallback) => void;
+  validate: (callback?: FormValidateCallback) => void
   validateField: (
     props?: Arrayable<FormItemProp> | undefined,
     callback?: FormValidateCallback | undefined
-  ) => FormValidationResult;
-  resetFields: (props?: Arrayable<FormItemProp> | undefined) => void;
-  clearValidate: (props?: Arrayable<FormItemProp> | undefined) => void;
-  scrollToField: (prop: FormItemProp) => void;
+  ) => FormValidationResult
+  resetFields: (props?: Arrayable<FormItemProp> | undefined) => void
+  clearValidate: (props?: Arrayable<FormItemProp> | undefined) => void
+  scrollToField: (prop: FormItemProp) => void
 
-  reset: () => void;
-  submit: () => void;
+  reset: () => void
+  submit: () => void
 }

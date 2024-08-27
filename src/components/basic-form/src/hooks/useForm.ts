@@ -1,105 +1,104 @@
-import type { FormProps, FormAction, FormSchema } from "../types/form";
-import type { FormValidateCallback, FormItemProp } from "element-plus";
+import type { FormProps, FormAction, FormSchema } from '../types/form'
+import type { FormValidateCallback, FormItemProp } from 'element-plus'
 
-export type Register = (formInstance: FormAction) => void;
+export type Register = (formInstance: FormAction) => void
 
-type UseFormReturn = [Register, FormAction];
+type UseFormReturn = [Register, FormAction]
 
 export function useForm(props?: FormProps): UseFormReturn {
-  const formRef = ref<Nullable<FormAction>>(null);
+  const formRef = ref<Nullable<FormAction>>(null)
 
   function getForm() {
-    const form = unref(formRef);
+    const form = unref(formRef)
     if (!form) {
       throw new Error(
-        "The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation"
-      );
+        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation'
+      )
     }
-    return form as FormAction;
+    return form as FormAction
   }
 
   function register(instance: FormAction) {
     onUnmounted(() => {
-      formRef.value = null;
-    });
+      formRef.value = null
+    })
 
-    formRef.value = instance;
+    formRef.value = instance
 
     watch(
       () => props,
       () => {
-        const formProps = unref(props);
+        const formProps = unref(props)
         if (formProps) {
-          getForm().setProps(formProps);
+          getForm().setProps(formProps)
         }
       },
       {
         immediate: true,
         deep: true,
       }
-    );
+    )
   }
 
   const methods: FormAction = {
     setProps: (formProps: Partial<FormProps>) => {
-      getForm().setProps(formProps);
+      getForm().setProps(formProps)
     },
 
     updateSchema: (schemas: Partial<FormSchema> | Partial<FormSchema>[]) => {
-      getForm().updateSchema(schemas);
+      getForm().updateSchema(schemas)
     },
 
     appendSchema: (
       schemas: FormSchema | FormSchema[],
       previousProp?: string
     ) => {
-      getForm().appendSchema(schemas, previousProp);
+      getForm().appendSchema(schemas, previousProp)
     },
 
     removeSchema: (fields: string | string[]) => {
-      getForm().removeSchema(fields);
+      getForm().removeSchema(fields)
     },
 
     getFieldsValue: () => {
-      console.log("getForm():", getForm());
-      return getForm().getFieldsValue() || {};
+      return getForm().getFieldsValue() || {}
     },
 
     setFieldsValue: (values: Recordable) => {
-      getForm().setFieldsValue(values);
+      getForm().setFieldsValue(values)
     },
 
     validate: (callback?: FormValidateCallback) => {
-      getForm().validate(callback);
+      getForm().validate(callback)
     },
 
     validateField: (
       props?: Arrayable<FormItemProp>,
       callback?: FormValidateCallback
     ) => {
-      getForm().validateField(props, callback);
+      getForm().validateField(props, callback)
     },
 
     resetFields: (props?: Arrayable<FormItemProp>) => {
-      getForm().resetFields(props);
+      getForm().resetFields(props)
     },
 
     clearValidate: (props?: Arrayable<FormItemProp>) => {
-      getForm().clearValidate(props);
+      getForm().clearValidate(props)
     },
 
     scrollToField: (prop: FormItemProp) => {
-      getForm().scrollToField(prop);
+      getForm().scrollToField(prop)
     },
 
     reset: () => {
-      getForm().reset();
+      getForm().reset()
     },
 
     submit: () => {
-      getForm().submit();
+      getForm().submit()
     },
-  };
+  }
 
-  return [register, methods];
+  return [register, methods]
 }

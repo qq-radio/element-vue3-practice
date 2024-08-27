@@ -23,3 +23,7 @@ export function isObject(o: unknown) {
 export function isString(o: unknown) {
   return lodash.isString(o)
 }
+
+export function cloneDeep<T>(o: T) {
+  return lodash.cloneDeep(o)
+}
