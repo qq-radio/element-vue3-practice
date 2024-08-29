@@ -1,3 +1,3 @@
-export * from './src/types/form.d'
+export * from './src/types'
 
 export { useForm } from './src/hooks/useForm'

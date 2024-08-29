@@ -5,6 +5,7 @@ import type {
   FormItemRule,
   FormValidateCallback,
   FormItemProp,
+  FormValidationResult,
 } from 'element-plus'
 
 export type ElementPlusComponentType =
@@ -55,7 +56,7 @@ export interface FormSchema {
   vIf?: (model: Recordable, schemaItem: FormSchema) => boolean
 }
 
-export interface FormProps {
+export interface BasicFormProps {
   model?: Recordable
   schemas: FormSchema[]
   loading?: boolean
@@ -83,8 +84,8 @@ export interface FormProps {
   modelAdapter?: (model: Recordable) => Recordable
 }
 
-export interface FormEmits {
-  (e: 'register', e: FormAction): void
+export interface BasicFormEmits {
+  (e: 'register', actions: FormAction): void
   (e: 'update:modelValue', values: Props['model']): void
   (e: 'change', e: unknown, schemaItem: FormSchema): void
   (e: 'submit', values: Props['model']): void
@@ -92,7 +93,7 @@ export interface FormEmits {
 }
 
 export interface FormAction {
-  setProps: (formProps: Partial<FormProps>) => void
+  setProps: (formProps: Partial<BasicFormProps>) => void
 
   updateSchema: (schemas: Partial<FormSchema> | Partial<FormSchema>[]) => void
   appendSchema: (

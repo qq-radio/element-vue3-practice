@@ -1,4 +1,4 @@
-import type { ComponentType } from '../types/form'
+import type { ComponentType } from '../types'
 import {
   ElInput,
   ElInputNumber,

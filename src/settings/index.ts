@@ -1,1 +1,1 @@
-export * from "./pagination";
+export * as DefaultPaginationSettings from './pagination'

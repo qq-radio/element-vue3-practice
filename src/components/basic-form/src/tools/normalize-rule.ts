@@ -1,4 +1,4 @@
-import type { FormSchema } from '../types/form'
+import type { FormSchema } from '../types'
 import type { FormItemRule } from 'element-plus'
 
 import { getPrefix } from './component-prefix'

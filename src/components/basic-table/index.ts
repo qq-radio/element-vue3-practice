@@ -1,1 +1,1 @@
-export * from "./src/types/table.d";
+export * from './src/types'

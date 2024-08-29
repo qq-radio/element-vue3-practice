@@ -1,4 +1,4 @@
-import type { FormProps, FormSchema } from '../types/form'
+import type { BasicFormProps, FormSchema } from '../types'
 
 import {
   normalizeSchema,
@@ -12,7 +12,7 @@ import { merge } from '@/utils/object'
 type UpdateSchemaParams = Partial<FormSchema> &
   Required<Pick<FormSchema, 'prop'>>
 
-export function useFormSchema(props: ComputedRef<FormProps>) {
+export function useFormSchema(props: ComputedRef<BasicFormProps>) {
   const schemaRef = ref<FormSchema[]>([])
   const modelRef = ref<Recordable>({})
   const defaultModelRef = ref<Recordable>({})

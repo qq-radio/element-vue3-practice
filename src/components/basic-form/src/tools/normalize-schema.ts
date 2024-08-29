@@ -1,4 +1,4 @@
-import type { FormSchema } from '../types/form'
+import type { FormSchema } from '../types'
 
 import { getPrefix } from './component-prefix'
 import { normalizeRule } from './normalize-rule'

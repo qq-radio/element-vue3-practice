@@ -62,7 +62,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormProps, FormEmits, FormSchema, FormAction } from './types/form'
+import type {
+  BasicFormProps,
+  BasicFormEmits,
+  FormSchema,
+  FormAction,
+} from './types'
 import type { FormInstance } from 'element-plus'
 
 import { getComponent } from './tools/component'
@@ -74,7 +79,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = withDefaults(defineProps<FormProps>(), {
+const props = withDefaults(defineProps<BasicFormProps>(), {
   model: () => ({}),
   schemas: () => [],
   loading: false,
@@ -96,16 +101,16 @@ const props = withDefaults(defineProps<FormProps>(), {
   hasErrorTip: true,
 })
 
-const emits = defineEmits<FormEmits>()
+const emits = defineEmits<BasicFormEmits>()
 
 const formInstance = ref<FormInstance>()
-const formProps = ref<Partial<FormProps>>()
+const formProps = ref<Partial<BasicFormProps>>()
 const formSchema = ref<FormSchema[]>([])
 const formModel = ref<Recordable>({})
 const defaultFormModel = ref<Recordable>({})
 
 const getProps = computed(() => {
-  return { ...props, ...unref(formProps) } as FormProps
+  return { ...props, ...unref(formProps) } as BasicFormProps
 })
 
 watchEffect(() => {
@@ -114,7 +119,7 @@ watchEffect(() => {
   defaultFormModel.value = setDefaultFormModel(getProps.value.schemas)
 })
 
-function setProps(props: Partial<FormProps>) {
+function setProps(props: Partial<BasicFormProps>) {
   formProps.value = merge(unref(formProps) || {}, props)
 }
 

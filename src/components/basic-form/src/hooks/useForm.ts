@@ -1,11 +1,11 @@
-import type { FormProps, FormAction, FormSchema } from '../types/form'
+import type { BasicFormProps, FormAction, FormSchema } from '../types'
 import type { FormValidateCallback, FormItemProp } from 'element-plus'
 
 export type Register = (formInstance: FormAction) => void
 
 type UseFormReturn = [Register, FormAction]
 
-export function useForm(props?: FormProps): UseFormReturn {
+export function useForm(props?: BasicFormProps): UseFormReturn {
   const formRef = ref<Nullable<FormAction>>(null)
 
   function getForm() {
@@ -41,7 +41,7 @@ export function useForm(props?: FormProps): UseFormReturn {
   }
 
   const methods: FormAction = {
-    setProps: (formProps: Partial<FormProps>) => {
+    setProps: (formProps: Partial<BasicFormProps>) => {
       getForm().setProps(formProps)
     },
 
