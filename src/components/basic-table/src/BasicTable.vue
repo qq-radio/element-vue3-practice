@@ -5,135 +5,151 @@
       v-bind="searchProps"
       v-model="searchParams"
       :schemas="searchSchemas"
-      :search-loading="loadingStatus"
-      @search="handleSearch"
-      @reset="handleReset"
+      :search-loading="isLoading"
+      @search="onSearch"
+      @reset="onReset"
     />
     <TableBody
       v-bind="tableProps"
       :schemas="tableSchemas"
       :data="tableDatas"
-      :loading="loadingStatus"
+      :loading="isLoading"
     >
-      <template v-for="(_, slotName) in $slots" #[slotName]="scope">
-        <slot :name="slotName" v-bind="scope" />
+      <template
+        v-for="slotName in getSlots"
+        #[slotName]="scope"
+        :key="slotName"
+      >
+        <slot :name="slotName" v-bind="scope || {}"></slot>
       </template>
     </TableBody>
     <BasicPagination
       v-if="pagination"
       v-bind="paginationProps"
-      v-model="currentPage"
-      @change="handlePaginationChange"
-    >
-      <template v-if="$slots['pagination-left']" #pagination-left>
-        <slot name="pagination-left" />
-      </template>
-      <template v-if="$slots['pagination-right']" #pagination-right>
-        <slot name="pagination-right" />
-      </template>
-    </BasicPagination>
+      v-model="page"
+      @change="onPageChange"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { BasicTableProps, BasicTableEmits } from './types'
-import type { Page } from '@/components/basic-pagination'
-import type { BasicFormProps } from '@/components/basic-form'
+import type { BasicTableProps, BasicTableEmits } from "./types";
+import type { Page } from "@/components/basic-pagination";
+import type { Slots } from "vue";
 
-import TableBody from './components/TableBody.vue'
-import { BasicPagination } from '@/components/basic-pagination'
+import { DefaultPaginationSettings } from "@/settings/index";
+import { isFunction, isObject, cloneDeep } from "@/utils/is";
 
-import { isFunction, isObject } from '@/utils/is'
+import TableBody from "./components/TableBody.vue";
+import { BasicPagination } from "@/components/basic-pagination";
 
 defineOptions({
-  name: 'BasicTable',
-})
+  name: "BasicTable",
+});
 
 const props = withDefaults(defineProps<BasicTableProps>(), {
   schemas: () => [],
+  extraParams: () => ({}),
   immediate: true,
   loading: false,
   ellipsis: false,
+  pageMap: () => DefaultPaginationSettings.default.pageMap,
   searchProps: () => ({}),
   tableProps: () => ({}),
   paginationProps: () => ({}),
-})
+});
 
-const emits = defineEmits<BasicTableEmits>()
+const emits = defineEmits<BasicTableEmits>();
+
+const getSlots: Recordable<Slots> = useSlots() || {};
 
 const searchSchemas = computed(() => {
-  return props.schemas.filter((item) => isObject(item.searchConfig))
-})
+  return props.schemas.filter((item) => isObject(item.searchConfig));
+});
 
-const searchParams = ref<Recordable>({})
+const searchParams = ref<Recordable>({});
 
 const tableSchemas = computed(() => {
-  return props.schemas.filter((item) => item.visible !== false)
-})
+  return props.schemas.filter((item) => item.visible !== false);
+});
 
-const tableDatas = ref<Recordable[]>([])
+const tableDatas = ref<Recordable[]>([]);
 
-const loadingStatus = ref(false)
+const isLoading = ref(false);
 
 const page = ref<Page>({
   currentPage: 1,
   pageSize: 10,
   total: 0,
-})
+});
+
+const getPageParams = () => ({
+  [props.pageMap.currentPage || "currentPage"]: page.value.currentPage,
+  [props.pageMap.pageSize || "pageSize"]: page.value.pageSize,
+});
+
+const getRequestParams = () => {
+  const params = {
+    ...props.extraParams,
+    ...searchParams.value,
+    ...getPageParams(),
+  };
+
+  return isFunction(props.paramsFormatter)
+    ? props.paramsFormatter(cloneDeep(params))
+    : params;
+};
+
+const formatResponse = (records: Recordable[]) =>
+  isFunction(props.responseFormatter)
+    ? props.responseFormatter(records)
+    : records;
 
 const query = async () => {
   try {
     if (!isFunction(props.request)) {
-      return
+      return;
     }
 
-    loadingStatus.value = true
+    isLoading.value = true;
 
-    const payload = {
-      ...searchParams.value,
-      ...{
-        [props.pageInfoMap?.currentPage || 'currentPage']:
-          page.value.currentPage,
-        [props.pageInfoMap?.pageSize || 'pageSize']: page.value.pageSize,
-      },
-      ...props.params,
-    }
+    const requestParams = getRequestParams();
 
-    const { data, total: dataTotal } = await props.request(payload)
-    const list = (props.postData && props.postData(data)) || data
-    tableDatas.value = list || []
-    total.value = dataTotal || list.length
+    const response = await props.request(requestParams);
 
-    emits('requestComplete', tableDatas.value)
+    tableDatas.value = formatResponse(response?.data?.records);
+    page.value.total = response?.data?.total;
+
+    emits("request-complete", tableDatas.value);
   } catch (error: unknown) {
-    emits('requestError', error)
+    emits("request-error", error);
+  } finally {
+    isLoading.value = false;
   }
-  loadingStatus.value = false
+};
+
+const reQuery = () => {
+  page.value.currentPage = 1;
+  query();
+};
+
+if (props.immediate || isFunction(props.request)) {
+  query();
 }
 
-if (props.immediate) {
-  query()
-}
+const onPageChange = (p: Page) => {
+  page.value.currentPage = p.currentPage;
+  query();
+  emits("pagination-change", p);
+};
 
-const handlePaginationChange = (_pageInfo: Page): void => {
-  page.value = _pageInfo
-  query()
-  emits('paginationChange', _pageInfo)
-}
+const onSearch = (params: Recordable) => {
+  searchParams.value = params;
+  reQuery();
+  emits("search", params);
+};
 
-const handleSearch = (val: Recordable) => {
-  const data =
-    (props.beforeSearchSubmit && props.beforeSearchSubmit(val)) || val
-  searchParams.value = data
-  page.value.currentPage = 1
-  query()
-  emits('search', searchParams.value)
-}
-
-const handleReset = (params: Recordable) => {
-  searchParams.value = { ...params }
-  page.value.currentPage = 1
-  query()
-  emits('reset', searchParams.value)
-}
+const onReset = (params: Recordable) => {
+  emits("reset", params);
+};
 </script>

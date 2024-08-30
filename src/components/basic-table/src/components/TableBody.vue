@@ -1,54 +1,14 @@
 <template>
   <div ref="tableWrapperInstance" class="plus-table">
-    <PlusTableTitleBar
-      v-if="titleBar"
-      :columns="filterColumns"
-      :default-size="size"
-      :columns-is-change="columnsIsChange"
-      :title-bar="titleBar"
-      @click-density="handleClickDensity"
-      @filter-table="handleFilterTableConfirm"
-      @refresh="handleRefresh"
-    >
-      <template #title>
-        <slot name="title" />
-      </template>
-
-      <template #toolbar>
-        <slot name="toolbar" />
-      </template>
-
-      <!-- 表格拖拽行 和 列设置里拖拽 icon -->
-      <template v-if="$slots['drag-sort-icon']" #drag-sort-icon>
-        <slot name="drag-sort-icon" />
-      </template>
-
-      <!-- 表格表头 列设置 icon   -->
-      <template v-if="$slots['column-settings-icon']" #column-settings-icon>
-        <slot name="column-settings-icon" />
-      </template>
-
-      <!-- 表表格表头 密度 icon  -->
-      <template v-if="$slots['density-icon']" #density-icon>
-        <slot name="density-icon" />
-      </template>
-    </PlusTableTitleBar>
-
     <el-table
-      ref="tableInstance"
+      v-bind="$attrs"
       v-loading="loading"
-      :reserve-selection="true"
-      :data="__tableData"
+      :data="tableDatas"
       :border="true"
-      :height="height"
-      :header-cell-style="headerCellStyle"
       :size="size"
       :row-key="rowKey"
       highlight-current-row
       scrollbar-always-on
-      v-bind="$attrs"
-      @cell-click="handleClickCell"
-      @cell-dblclick="handleDoubleClickCell"
     >
       <!-- 默认插槽 -->
       <template #default>
@@ -68,19 +28,6 @@
             :index-table-column-props="indexTableColumnProps"
             :page-info="(pagination as PlusPaginationProps)?.modelValue"
           />
-
-          <!-- 拖拽行 -->
-          <PlusTableColumnDragSort
-            v-if="dragSortable"
-            :sortable="dragSortable"
-            :drag-sortable-table-column-props="dragSortableTableColumnProps"
-            :table-instance="tableInstance"
-            @dragSortEnd="handleDragSortEnd"
-          >
-            <template v-if="$slots['drag-sort-icon']" #drag-sort-icon>
-              <slot name="drag-sort-icon" />
-            </template>
-          </PlusTableColumnDragSort>
 
           <!-- 展开行 -->
           <el-table-column
@@ -174,23 +121,23 @@ import {
   useSlots,
   unref,
   computed,
-} from 'vue'
-import type { PlusPaginationProps } from '@plus-pro-components/components/pagination'
+} from "vue";
+import type { PlusPaginationProps } from "@plus-pro-components/components/pagination";
 import {
   DefaultPageInfo,
   TableFormRefInjectionKey,
   TableFormFieldRefInjectionKey,
-} from '@plus-pro-components/constants'
-import type { Ref, ComputedRef } from 'vue'
-import type { ComponentSize } from 'element-plus/es/constants'
-import type { TableInstance } from 'element-plus'
-import { ElTable, ElTableColumn, vLoading } from 'element-plus'
+} from "@plus-pro-components/constants";
+import type { Ref, ComputedRef } from "vue";
+import type { ComponentSize } from "element-plus/es/constants";
+import type { TableInstance } from "element-plus";
+import { ElTable, ElTableColumn, vLoading } from "element-plus";
 import type {
   PageInfo,
   PlusColumn,
   RecordType,
   FormFieldRefsType,
-} from '@plus-pro-components/types'
+} from "@plus-pro-components/types";
 import {
   getTableCellSlotName,
   getTableHeaderSlotName,
@@ -198,13 +145,11 @@ import {
   getExtraSlotName,
   filterSlots,
   isSVGElement,
-} from '@plus-pro-components/components/utils'
-import { cloneDeep } from 'lodash-es'
-import PlusTableActionBar from './table-action-bar.vue'
-import PlusTableColumn from './table-column.vue'
-import PlusTableTableColumnIndex from './table-column-index.vue'
-import PlusTableColumnDragSort from './table-column-drag-sort.vue'
-import PlusTableTitleBar from './table-title-bar.vue'
+} from "@plus-pro-components/components/utils";
+import { cloneDeep } from "lodash-es";
+import PlusTableActionBar from "./table-action-bar.vue";
+import PlusTableColumn from "./table-column.vue";
+import PlusTableTableColumnIndex from "./table-column-index.vue";
 import type {
   ButtonsCallBackParams,
   PlusTableState,
@@ -212,15 +157,15 @@ import type {
   PlusTableEmits,
   TableFormRefRow,
   FormChangeCallBackParams,
-} from './type'
+} from "./type";
 
 defineOptions({
-  name: 'PlusTable',
+  name: "PlusTable",
   inheritAttrs: false,
-})
+});
 
 const props = withDefaults(defineProps<PlusTableProps>(), {
-  defaultSize: 'default',
+  defaultSize: "default",
   pagination: false,
   actionBar: false,
   hasIndexColumn: false,
@@ -228,15 +173,10 @@ const props = withDefaults(defineProps<PlusTableProps>(), {
   isSelection: false,
   hasExpand: false,
   loading: false,
-  tableData: () => [],
   data: () => [],
   columns: () => [],
-  headerCellStyle: () => ({
-    'background-color': 'var(--el-fill-color-light)',
-  }),
-  rowKey: 'id',
-  dragSortable: false,
-  dragSortableTableColumnProps: () => ({}),
+
+  rowKey: "id",
   indexTableColumnProps: () => ({}),
   indexContentStyle: () => ({}),
   selectionTableColumnProps: () => ({
@@ -244,141 +184,125 @@ const props = withDefaults(defineProps<PlusTableProps>(), {
   }),
   expandTableColumnProps: () => ({}),
   editable: false,
-})
-const emit = defineEmits<PlusTableEmits>()
+});
+const emit = defineEmits<PlusTableEmits>();
 
-const subColumns: Ref<PlusColumn[]> = ref([])
-const columnsIsChange: Ref<boolean> = ref(false)
-const filterColumns: Ref<PlusColumn[]> = ref([])
-const tableInstance = shallowRef<TableInstance | null>(null)
-const tableWrapperInstance = ref<HTMLDivElement | null>(null)
+const subColumns: Ref<PlusColumn[]> = ref([]);
+const columnsIsChange: Ref<boolean> = ref(false);
+const filterColumns: Ref<PlusColumn[]> = ref([]);
+const tableWrapperInstance = ref<HTMLDivElement | null>(null);
 const state = reactive<PlusTableState>({
   subPageInfo: {
     ...(((props.pagination as PlusPaginationProps)?.modelValue ||
       DefaultPageInfo) as PageInfo),
   },
   size: props.defaultSize,
-})
-const __tableData: ComputedRef<RecordType[]> = computed(() =>
-  props.tableData?.length ? props.tableData : props.data
-)
+});
 
-const slots = useSlots()
+const tableDatas = computed<RecordType[]>(() => props.data);
+
+const slots = useSlots();
 
 /**
  * 表格单元格的插槽
  */
-const cellSlots = filterSlots(slots, getTableCellSlotName())
+const cellSlots = filterSlots(slots, getTableCellSlotName());
 
 /**
  * 表格单元格表头的插槽
  */
-const headerSlots = filterSlots(slots, getTableHeaderSlotName())
+const headerSlots = filterSlots(slots, getTableHeaderSlotName());
 
 /**
  * 表单单项的插槽
  */
-const fieldSlots = filterSlots(slots, getFieldSlotName())
+const fieldSlots = filterSlots(slots, getFieldSlotName());
 
 /**
  * el-form-item 下一行额外的内容 的插槽
  */
-const extraSlots = filterSlots(slots, getExtraSlotName())
+const extraSlots = filterSlots(slots, getExtraSlotName());
 
 /**
  * 表单的ref
  */
-const formRefs = shallowRef<Record<string | number, TableFormRefRow[]>>({})
-provide(TableFormRefInjectionKey, formRefs)
+const formRefs = shallowRef<Record<string | number, TableFormRefRow[]>>({});
+provide(TableFormRefInjectionKey, formRefs);
 /**
  * 表单Field的ref
  */
-const formFieldRefs = shallowRef<FormFieldRefsType>({})
-provide(TableFormFieldRefInjectionKey, formFieldRefs)
+const formFieldRefs = shallowRef<FormFieldRefsType>({});
+provide(TableFormFieldRefInjectionKey, formFieldRefs);
 
 // 监听配置更改
 watch(
   () => props.columns,
   (val) => {
-    subColumns.value = val.filter((item) => unref(item.hideInTable) !== true)
-    filterColumns.value = cloneDeep(subColumns.value)
-    columnsIsChange.value = !columnsIsChange.value
+    subColumns.value = val.filter((item) => unref(item.hideInTable) !== true);
+    filterColumns.value = cloneDeep(subColumns.value);
+    columnsIsChange.value = !columnsIsChange.value;
   },
   {
     deep: true,
     immediate: true,
   }
-)
+);
 
 // 发分页改变事件
 const handlePaginationChange = () => {
-  emit('paginationChange', { ...state.subPageInfo })
-}
+  emit("paginationChange", { ...state.subPageInfo });
+};
 
 const handleAction = (callbackParams: ButtonsCallBackParams) => {
-  emit('clickAction', callbackParams)
-}
+  emit("clickAction", callbackParams);
+};
 
 const handleClickActionConfirmCancel = (
   callbackParams: ButtonsCallBackParams
 ) => {
-  emit('clickActionConfirmCancel', callbackParams)
-}
+  emit("clickActionConfirmCancel", callbackParams);
+};
 
 const handleFilterTableConfirm = (_columns: PlusColumn[]) => {
-  filterColumns.value = _columns
+  filterColumns.value = _columns;
   subColumns.value = _columns.filter(
     (item) =>
       unref(item.hideInTable) !== true && item.__selfHideInTable !== true
-  )
-}
-
-// 密度
-const handleClickDensity = (size: ComponentSize) => {
-  state.size = size
-}
-
-const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
-  emit('dragSortEnd', newIndex, oldIndex)
-}
-
-// 刷新
-const handleRefresh = () => {
-  emit('refresh')
-}
+  );
+};
 
 const handleFormChange = (data: FormChangeCallBackParams) => {
-  emit('formChange', data)
-}
+  emit("formChange", data);
+};
 
 // 保存活动的表单
-const currentForm = ref()
+const currentForm = ref();
 
 const handleCellEdit = (
   row: RecordType,
   column: PlusColumn,
-  type: 'click' | 'dblclick'
+  type: "click" | "dblclick"
 ) => {
-  const rowIndex = __tableData.value.indexOf(row)
-  const columnIndex = column.index
-  const columnConfig = subColumns.value[column.index]
+  const rowIndex = tableDatas.value.indexOf(row);
+  const columnIndex = column.index;
+  const columnConfig = subColumns.value[column.index];
 
   // 不是可编辑行，如操作栏
-  if (!columnConfig) return
+  if (!columnConfig) return;
 
   if (props.editable === type) {
-    document.addEventListener('click', handleStopEditClick)
+    document.addEventListener("click", handleStopEditClick);
 
-    const currentCellForm = formRefs.value[rowIndex][columnIndex]
+    const currentCellForm = formRefs.value[rowIndex][columnIndex];
 
     // 停止上一个表单的编辑状态
     if (currentForm.value) {
-      currentForm.value?.stopCellEdit()
+      currentForm.value?.stopCellEdit();
     }
-    currentForm.value = currentCellForm
+    currentForm.value = currentCellForm;
 
     // 开启当前点击的单元格的编辑
-    currentCellForm.startCellEdit()
+    currentCellForm.startCellEdit();
 
     // 当表单初始化完成
     const unwatch = watch(
@@ -387,16 +311,16 @@ const handleCellEdit = (
         if (
           val?.value &&
           formFieldRefs.value?.fieldInstance?.focus &&
-          (props.editable === 'click' || props.editable === 'dblclick')
+          (props.editable === "click" || props.editable === "dblclick")
         ) {
-          formFieldRefs.value.fieldInstance.focus()
+          formFieldRefs.value.fieldInstance.focus();
           // 销毁监听
-          unwatch()
+          unwatch();
         }
       }
-    )
+    );
   }
-}
+};
 
 const handleClickCell = (
   row: RecordType,
@@ -404,9 +328,9 @@ const handleClickCell = (
   cell: HTMLTableCellElement,
   event: Event
 ) => {
-  handleCellEdit(row, column, 'click')
-  emit('cell-click', row, column, cell, event)
-}
+  handleCellEdit(row, column, "click");
+  emit("cell-click", row, column, cell, event);
+};
 
 const handleDoubleClickCell = (
   row: RecordType,
@@ -414,31 +338,30 @@ const handleDoubleClickCell = (
   cell: HTMLTableCellElement,
   event: Event
 ) => {
-  handleCellEdit(row, column, 'dblclick')
-  emit('cell-dblclick', row, column, cell, event)
-}
+  handleCellEdit(row, column, "dblclick");
+  emit("cell-dblclick", row, column, cell, event);
+};
 
 // 退出编辑状态
 const handleStopEditClick = (e: MouseEvent) => {
   if (tableWrapperInstance.value && currentForm.value) {
-    const wrapperClass = '.el-table__body-wrapper'
-    const tbody = tableWrapperInstance.value.querySelector(wrapperClass)!
-    const target = e?.target as HTMLElement
-    const cls = Array.from(target.classList).join('.')
-    const tempCls = cls ? `.${cls}` : ''
-    const contains = tempCls && tbody.querySelector(tempCls)
+    const wrapperClass = ".el-table__body-wrapper";
+    const tbody = tableWrapperInstance.value.querySelector(wrapperClass)!;
+    const target = e?.target as HTMLElement;
+    const cls = Array.from(target.classList).join(".");
+    const tempCls = cls ? `.${cls}` : "";
+    const contains = tempCls && tbody.querySelector(tempCls);
     if (!contains && !isSVGElement(target)) {
-      currentForm.value?.stopCellEdit()
-      emit('edited')
-      document.removeEventListener('click', handleStopEditClick)
+      currentForm.value?.stopCellEdit();
+      emit("edited");
+      document.removeEventListener("click", handleStopEditClick);
     }
   }
-}
+};
 
-const { subPageInfo, size } = toRefs(state)
+const { subPageInfo, size } = toRefs(state);
 
 defineExpose({
   formRefs,
-  tableInstance,
-})
+});
 </script>

@@ -47,3 +47,10 @@ basic-table里的下面这3个被我删了，看起来好像写的很复杂，�
 - 表单单项的插槽
   \*/
   const fieldSlots = filterSlots(slots, getFieldSlotName())
+
+我把 原本tablebody有的 @cell-click="handleClickCell"
+@cell-dblclick="handleDoubleClickCell" 这2个删了 这2个是el-table提供出来的emits事件，我暂时删了
+但我认为之后要还回来，原因是你不能把原本有的功能丢失掉
+但是我不认为应该在emits中定义原因是太多了，应该直接使用v-bind eventlister
+
+table的插槽全部的都有
