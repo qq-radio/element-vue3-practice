@@ -15,12 +15,8 @@
       :data="tableDatas"
       :loading="isLoading"
     >
-      <template
-        v-for="slotName in getSlots"
-        #[slotName]="scope"
-        :key="slotName"
-      >
-        <slot :name="slotName" v-bind="scope || {}"></slot>
+      <template v-for="(_, key) in getSlots" :key="key" #[key]="scope">
+        <slot :name="key" v-bind="scope" />
       </template>
     </TableBody>
     <BasicPagination
@@ -61,10 +57,12 @@ const props = withDefaults(defineProps<BasicTableProps>(), {
 
 const emits = defineEmits<BasicTableEmits>();
 
-const getSlots: Recordable<Slots> = useSlots() || {};
+const getSlots = useSlots();
 
 const searchSchemas = computed(() => {
-  return props.schemas.filter((item) => isObject(item.searchConfig));
+  return props.schemas
+    .filter((item) => isObject(item.searchConfig))
+    .map((item) => item.searchConfig);
 });
 
 const searchParams = ref<Recordable>({});
@@ -101,9 +99,7 @@ const getRequestParams = () => {
 };
 
 const formatResponse = (records: Recordable[]) =>
-  isFunction(props.responseFormatter)
-    ? props.responseFormatter(records)
-    : records;
+  isFunction(props.dataFormatter) ? props.dataFormatter(records) : records;
 
 const query = async () => {
   try {

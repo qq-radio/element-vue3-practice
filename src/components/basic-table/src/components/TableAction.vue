@@ -63,7 +63,7 @@ import {
   ElDropdownItem,
   ElDropdownMenu,
 } from "element-plus";
-import type { RecordType } from "@plus-pro-components/types";
+import type { Recordable } from "../types";
 import {
   isFunction,
   isPlainObject,
@@ -105,7 +105,7 @@ export interface ActionBarProps {
   /**
    * 表格操作栏 el-table-column 的其他props   默认值为 `{}`
    */
-  actionBarTableColumnProps?: Partial<TableColumnCtx<RecordType>>;
+  actionBarTableColumnProps?: Partial<TableColumnCtx<Recordable>>;
 }
 export interface PlusTableActionBarEmits {
   (e: "clickAction", data: ButtonsCallBackParams): void;
@@ -133,11 +133,11 @@ const formRefs = inject(TableFormRefInjectionKey) as Ref<
   Record<string | number, TableFormRefRow[]>
 >;
 
-const getSubButtons = (row: RecordType, index: number) => {
+const getSubButtons = (row: Recordable, index: number) => {
   const data = props.buttons.filter((item) => {
     if (isFunction(item.show)) {
       const tempFunction = item.show as (
-        row: RecordType,
+        row: Recordable,
         index: number,
         button: ActionBarButtonsRow
       ) => boolean | Ref<boolean> | ComputedRef<boolean>;
@@ -161,10 +161,10 @@ const getSubButtons = (row: RecordType, index: number) => {
 
 // 渲染
 const render = (
-  row: RecordType,
+  row: Recordable,
   buttonRow: ActionBarButtonsRow,
   index: number,
-  rest: RecordType
+  rest: Recordable
 ): VNode => {
   if (props.type === "icon") {
     return h(
@@ -207,7 +207,7 @@ const render = (
         () => {
           if (isFunction(buttonRow.text)) {
             const tempFunction = buttonRow.text as (
-              row: RecordType,
+              row: Recordable,
               index: number,
               button: ActionBarButtonsRow
             ) => string | Ref<string> | ComputedRef<string>;
@@ -225,11 +225,11 @@ const render = (
 
 // 分发按钮事件
 const handleClickAction = (
-  row: RecordType,
+  row: Recordable,
   buttonRow: ActionBarButtonsRow,
   index: number,
   e: MouseEvent,
-  rest: RecordType
+  rest: Recordable
 ) => {
   const callbackParams = {
     row,

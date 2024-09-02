@@ -1,7 +1,7 @@
 <template>
   <component
     :is="renderComponent"
-    v-if="renderType === 'form'"
+    v-if="displayType === 'form'"
     v-model="state"
     v-bind="customFieldProps"
   />
@@ -18,7 +18,7 @@ export interface PlusRenderProps {
   /**
    * 渲染的类型
    */
-  renderType?: "form";
+  displayType?: "form";
   /**
    * 回调参数的第一个值
    */
@@ -36,7 +36,7 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<PlusRenderProps>(), {
-  renderType: undefined,
+  displayType: undefined,
   callbackValue: "",
   customFieldProps: () => ({}),
   params: () => ({}),
@@ -66,7 +66,7 @@ const renderComponent = () => {
 
   /** dynamicComponent 组件 */
   const dynamicComponent =
-    props.renderType === "form"
+    props.displayType === "form"
       ? (props.render as Exclude<PlusColumn["renderField"], undefined>)(
           state.value,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -78,7 +78,7 @@ const renderComponent = () => {
   /** VNode / J(T)SX  虚拟dom或者jsx */
   if (isVNode(dynamicComponent)) {
     const payload =
-      props.renderType === "form"
+      props.displayType === "form"
         ? {
             modelValue: state.value,
             ...props.customFieldProps,

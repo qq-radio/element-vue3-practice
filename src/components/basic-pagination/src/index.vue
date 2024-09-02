@@ -19,10 +19,14 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<BasicPaginationProps>(), {
-  modelValue: () => ({}),
+  modelValue: () => ({
+    currentPage: 1,
+    pageSize: 10,
+    total: 0,
+  }),
 });
 
-const emit = defineEmits<BasicPaginationEmits>();
+const emits = defineEmits<BasicPaginationEmits>();
 
 const getAttrs = computed(() => ({
   ...DefaultPaginationSettings,
@@ -40,20 +44,20 @@ watchEffect(() => {
 });
 
 const handleEmit = () => {
-  emit("update:modelValue", page.value);
-  emit("change", page.value);
+  emits("update:modelValue", page.value);
+  emits("change", page.value);
 };
 
-const handleSizeChange = (pageSize: number) => {
-  page.value.pageSize = pageSize;
-  page.value.page = 1;
+const handleCurrentChange = (p: number) => {
+  page.value.currentPage = p;
   handleEmit();
-  emit("size-change", pageSize);
+  emits("current-change", p);
 };
 
-const handleCurrentChange = (page: number) => {
-  page.value.page = page;
+const handleSizeChange = (s: number) => {
+  page.value.pageSize = s;
+  page.value.currentPage = 1;
   handleEmit();
-  emit("current-change", page);
+  emits("size-change", s);
 };
 </script>
