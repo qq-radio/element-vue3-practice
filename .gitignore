@@ -15,3 +15,8 @@ pnpm-lock.yaml
 components.d.ts
 auto-imports.d.ts
 .eslintrc-auto-import.json
+
+
+
+docs/.vitepress/cache
+docs/.vitepress/dist
