@@ -1,3 +1,5 @@
 :::demo
-怎么可能？？
+
+table/table-demo
+
 :::

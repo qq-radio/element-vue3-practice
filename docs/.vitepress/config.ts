@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { mdPlugin } from './plugins/mdPlugin'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -28,5 +29,9 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' },
     ],
+  },
+  markdown: {
+    lineNumbers: true,
+    config: (md) => mdPlugin(md),
   },
 })
