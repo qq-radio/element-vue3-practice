@@ -67,10 +67,10 @@ export type RenderType = string | VNode | JSX.Element | Component;
 export type DisplayType = "img" | "link" | "tag" | "progress" | "copy";
 
 export interface TableSchema {
-  label: string;
   prop: string;
+  label: string;
+  width: string | number;
   visible?: boolean;
-  width?: string | number;
   searchable?: boolean;
   searchConfig?: FormSchema;
 
@@ -83,6 +83,7 @@ export interface TableSchema {
   ) => RenderType;
   slot?: string;
   displayType?: DisplayType;
-  columnProps: Recordable;
-  columnSlots: Recordable;
+
+  columnProps?: Recordable;
+  columnSlots?: Recordable;
 }

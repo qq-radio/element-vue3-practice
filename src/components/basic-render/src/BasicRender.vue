@@ -1,28 +1,16 @@
 <template>
-  <component
-    :is="renderComponent"
-    v-if="displayType === 'form'"
-    v-model="state"
-    v-bind="customFieldProps"
-  />
-  <component :is="renderComponent" v-else v-bind="customFieldProps" />
+  <component :is="renderComponent" v-bind="customFieldProps" />
 </template>
 
 <script lang="ts" setup>
-import { isVNode, watch, ref } from "vue";
+import type { PlusColumn  } from "@plus-pro-components/types";
 import type { VNode } from "vue";
-import type { PlusColumn, FieldValueType } from "@plus-pro-components/types";
-import { isString } from "@plus-pro-components/components/utils";
+
+import { isVNode } from "vue";
+import { isString } from "@/utils/is";
 
 export interface PlusRenderProps {
-  /**
-   * 渲染的类型
-   */
-  displayType?: "form";
-  /**
-   * 回调参数的第一个值
-   */
-  callbackValue?: FieldValueType;
+  callbackValue?: unknown ;
   customFieldProps?: PlusColumn["fieldProps"] | PlusColumn["formItemProps"];
   // eslint-disable-next-line vue/require-default-prop
   render?: PlusColumn["renderField"] | ((...arg: any[]) => void);
@@ -36,7 +24,6 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<PlusRenderProps>(), {
-  displayType: undefined,
   callbackValue: "",
   customFieldProps: () => ({}),
   params: () => ({}),
@@ -65,29 +52,17 @@ const renderComponent = () => {
   const params = { ...props.params } as PlusColumn;
 
   /** dynamicComponent 组件 */
-  const dynamicComponent =
-    props.displayType === "form"
-      ? (props.render as Exclude<PlusColumn["renderField"], undefined>)(
-          state.value,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          props.handleChange!,
-          params as PlusColumn
-        )
-      : (props.render as (...arg: any[]) => any)(state.value, params);
+  const dynamicComponent = (props.render as (...arg: any[]) => any)(
+    state.value,
+    params
+  );
 
   /** VNode / J(T)SX  虚拟dom或者jsx */
   if (isVNode(dynamicComponent)) {
-    const payload =
-      props.displayType === "form"
-        ? {
-            modelValue: state.value,
-            ...props.customFieldProps,
-            ...dynamicComponent.props,
-          }
-        : {
-            ...props.customFieldProps,
-            ...dynamicComponent.props,
-          };
+    const payload = {
+      ...props.customFieldProps,
+      ...dynamicComponent.props,
+    };
 
     return {
       ...dynamicComponent,

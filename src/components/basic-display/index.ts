@@ -1,4 +1,4 @@
-import DisplayItem from "./src/index.vue";
+import DisplayItem from "./src/BasicDisplay.vue";
 
 export type PlusDisplayItemInstance = InstanceType<typeof DisplayItem>;
 export type { PlusDisplayItemProps } from "./src/index.vue";

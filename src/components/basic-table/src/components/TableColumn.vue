@@ -1,40 +1,39 @@
 <template>
   <div>
     <el-table-column
-      v-bind="column.columnProps"
-      :prop="column.prop"
-      :width="column.width"
-      :min-width="column.minWidth"
-      :index="index"
+      v-if="schema"
+      v-bind="schema.columnProps"
+      :label="schema.label"
+      :prop="schema.prop"
+      :width="schema.width"
     >
       <template #header="scoped">
-        <span class="plus-table-column__header">
+        <span>
           <PlusRender
-            v-if="column.renderHeader && isFunction(column.renderHeader)"
-            :render="column.renderHeader"
-            :params="{ ...scoped, ...column, cellIndex: index }"
-            :callback-value="getLabel(column.label)"
+            v-if="schema.renderHeader && isFunction(schema.renderHeader)"
+            :render="schema.renderHeader"
+            :params="{ ...scoped, ...schema, cellIndex: index }"
+            :callback-value="getLabel(schema.label)"
           />
 
-          <!--表格单元格Header的插槽 -->
           <slot
             v-else
-            :name="getTableHeaderSlotName(column.prop)"
-            :prop="column.prop"
-            :label="getLabel(column.label)"
-            :field-props="column.fieldProps"
-            :value-type="column.valueType"
+            :name="getTableHeaderSlotName(schema.prop)"
+            :prop="schema.prop"
+            :label="getLabel(schema.label)"
+            :field-props="schema.fieldProps"
+            :value-type="schema.valueType"
             :cell-index="index"
             v-bind="scoped"
-            :column="{ ...scoped, ...column }"
+            :column="{ ...scoped, ...schema }"
           >
-            {{ getLabel(column.label) }}
+            {{ getLabel(schema.label) }}
           </slot>
 
           <el-tooltip
-            v-if="column.tooltip"
+            v-if="schema.tooltip"
             placement="top"
-            v-bind="getTooltip(column.tooltip)"
+            v-bind="getTooltip(schema.tooltip)"
           >
             <slot name="tooltip-icon">
               <el-icon class="plus-table-column__header__icon" :size="16">
@@ -46,8 +45,7 @@
       </template>
 
       <template #default="{ row, column, $index, ...rest }">
-        <PlusDisplayItem
-          ref="plusDisplayItemInstance"
+        <BasicDisplay
           :column="column"
           :row="row"
           :index="$index"
@@ -83,19 +81,15 @@
           <template v-if="$slots['edit-icon']" #edit-icon>
             <slot name="edit-icon" />
           </template>
-        </PlusDisplayItem>
+        </BasicDisplay>
       </template>
     </el-table-column>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { PlusDisplayItem } from "@plus-pro-components/components/display-item";
-import type { PlusDisplayItemInstance } from "@plus-pro-components/components/display-item";
-import type { TableSchema, Recordable } from "../types";
+import type { TableSchema } from "../types";
 import {
-  getTooltip,
-  getTableKey,
   getTableCellSlotName,
   getTableHeaderSlotName,
   getFieldSlotName,
@@ -112,106 +106,15 @@ import type { TableColumnCtx } from "element-plus";
 import { ElTableColumn, ElTooltip, ElIcon } from "element-plus";
 import type { TableFormRefRow, FormChangeCallBackParams } from "./type";
 
-export interface PlusTableTableColumnProps {
-  column?: TableSchema;
-  editable?: boolean | "click" | "dblclick";
-}
-export interface PlusTableTableColumnEmits {
-  (e: "formChange", data: FormChangeCallBackParams): void;
-}
-
 defineOptions({
   name: "PlusTableTableColumn",
 });
 
-const props = withDefaults(defineProps<PlusTableTableColumnProps>(), {
-  column: () => ({}),
-  editable: false,
-});
-const emit = defineEmits<PlusTableTableColumnEmits>();
+interface TableColumnProps {
+  column?: TableSchema;
+}
 
-/**
- *  表单ref处理
- */
-const plusDisplayItemInstance = ref<PlusDisplayItemInstance[] | null>();
-const formRef = inject(TableFormRefInjectionKey) as Ref<
-  Record<string | number, TableFormRefRow[]>
->;
-
-/**
- *  设置表单ref
- */
-const setFormRef = () => {
-  if (!plusDisplayItemInstance.value?.length) return;
-  const data: Recordable = {};
-  const list: {
-    index: number;
-    prop: string;
-    formInstance: ComputedRef<any>;
-  }[] =
-    plusDisplayItemInstance.value?.map((item) => ({
-      ...item,
-      ...item?.getDisplayItemInstance(),
-    })) || [];
-  list.forEach((item) => {
-    if (!data[item.index]) {
-      data[item.index] = [];
-    }
-    data[item.index].push(item);
-  });
-
-  formRef.value = data;
-};
-
-watch(
-  plusDisplayItemInstance,
-  () => {
-    setFormRef();
-  },
-  {
-    deep: true,
-  }
-);
-
-// 是否需要editIcon
-const hasPropsEditIcon = computed(
-  () => props.editable === "click" || props.editable === "dblclick"
-);
-
-/**
- * 获取key
- * @param item
- */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const getKey = (item: TableSchema) => getTableKey(item, true);
-
-/**
- * 表单发生变化
- * @param data
- * @param index
- * @param column
- * @param item
- */
-const handleChange = (
-  data: { value: any; prop: string; row: Recordable },
-  index: number,
-  column: TableColumnCtx<Recordable>,
-  item: TableSchema,
-  rest: Recordable
-) => {
-  const formChangeCallBackParams = {
-    ...data,
-    index,
-    column: { ...column, ...item },
-    rowIndex: index,
-    ...rest,
-  } as unknown as FormChangeCallBackParams;
-
-  emit("formChange", formChangeCallBackParams);
-};
-
-defineExpose({
-  plusDisplayItemInstance,
+const props = withDefaults(defineProps<TableColumnProps>(), {
+  column: undefined,
 });
 </script>
