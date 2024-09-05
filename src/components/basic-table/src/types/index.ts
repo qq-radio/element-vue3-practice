@@ -1,4 +1,4 @@
-import type { TableProps, PaginationProps } from "element-plus";
+import type { TableProps, PaginationProps, TableColumnCtx } from "element-plus";
 
 import type {
   BasicFormProps,
@@ -64,15 +64,34 @@ export type BasicTableBodyProps = Pick<
 
 export type RenderType = string | VNode | JSX.Element | Component;
 
-export type DisplayType = "img" | "link" | "tag" | "progress" | "copy";
+export type DisplayType =
+  | "img"
+  | "link"
+  | "tag"
+  | "progress"
+  | "copy"
+  | "badge";
+
+export interface TableColumn extends TableColumnCtx<any> {}
 
 export interface TableSchema {
   prop: string;
   label: string;
-  width: string | number;
+  width?: string | number;
   visible?: boolean;
+  tooltip?: string;
+  formatter?: (params: {
+    row: Recordable;
+    column: TableColumn;
+    columnIndex: number;
+    schema: TableSchema;
+  }) => string;
+
   searchable?: boolean;
   searchConfig?: FormSchema;
+
+  columnProps?: Recordable;
+  columnSlots?: Recordable;
 
   renderHeader?: (label: string, props: TableSchema) => RenderType;
   slotHeader?: string;
@@ -82,8 +101,7 @@ export interface TableSchema {
     data: { row: Recordable; column: TableSchema; index: number }
   ) => RenderType;
   slot?: string;
-  displayType?: DisplayType;
 
-  columnProps?: Recordable;
-  columnSlots?: Recordable;
+  displayType?: DisplayType;
+  displayProps?: Recordable;
 }

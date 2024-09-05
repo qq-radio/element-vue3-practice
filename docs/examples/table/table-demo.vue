@@ -1,7 +1,5 @@
 <template>
-  <div><BasicForm /> ??o</div>
+  <div>?????</div>
 </template>
 
-<script setup lang="ts">
-import BasicForm from '@components/basic-demo/Demo.vue'
-</script>
+<script setup lang="ts"></script>

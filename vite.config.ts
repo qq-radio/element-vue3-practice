@@ -22,6 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@/': `${pathSrc}/`,
+      '@components': `${pathSrc}/components`,
     },
   },
   css: {

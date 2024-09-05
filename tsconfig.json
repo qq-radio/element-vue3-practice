@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",
@@ -15,7 +16,8 @@
       "@/*": ["src/*"],
       "@components": ["src/components"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
   "vueCompilerOptions": {
     "target": 3
