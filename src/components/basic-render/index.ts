@@ -1,5 +1,3 @@
-import Render from "./src/index.vue";
+export { default as BasicRender } from "./src/BasicRender.vue";
 
-export type { PlusRenderProps } from "./src/index.vue";
-
-export const BasicRender = Render;
+export * from "./src/type";
