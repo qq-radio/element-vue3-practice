@@ -97,3 +97,6 @@ v-bind="customFieldProps"
 
 禁止内耗
 内耗禁止
+
+之前没有细看plus的form 和 form-item，稍微看了下，我还缺少什么？
+renderLabel 其实和table 那里的做法是一样的
