@@ -7,21 +7,21 @@
     <div class="flex main-container">
       <BaseSide />
       <div w="full" m="1.5" bg-white>
-        <!-- <BasicForm
+        <BasicForm
           v-model="formModel"
           @register="registerForm"
           @change="handleChange"
           @submit="handleSubmit"
           @reset="handleReset"
         />
-        ???
+        <!-- ???
         <BasicForm
           @register="registerFormTwo"
           @change="handleChange"
           @submit="handleSubmit"
           @reset="handleReset"
         /> -->
-        <BasicRender :schemas="schemasTable" />
+        <!-- <BasicRender :schemas="schemasTable" /> -->
       </div>
     </div>
   </el-config-provider>

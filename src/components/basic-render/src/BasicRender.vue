@@ -3,27 +3,17 @@
 </template>
 
 <script lang="ts" setup>
-import type { PlusColumn  } from "@plus-pro-components/types";
+import type { BasicRenderProps, PlusColumn } from "./type";
 import type { VNode } from "vue";
 
 import { isVNode } from "vue";
 import { isString } from "@/utils/is";
 
-export interface PlusRenderProps {
-  callbackValue?: unknown ;
-  customFieldProps?: PlusColumn["fieldProps"] | PlusColumn["formItemProps"];
-  // eslint-disable-next-line vue/require-default-prop
-  render?: PlusColumn["renderField"] | ((...arg: any[]) => void);
-  params?: Partial<PlusColumn>;
-  // eslint-disable-next-line vue/require-default-prop
-  handleChange?: (...arg: any[]) => void;
-}
-
 defineOptions({
   name: "PlusRender",
 });
 
-const props = withDefaults(defineProps<PlusRenderProps>(), {
+const props = withDefaults(defineProps<BasicRenderProps>(), {
   callbackValue: "",
   customFieldProps: () => ({}),
   params: () => ({}),
