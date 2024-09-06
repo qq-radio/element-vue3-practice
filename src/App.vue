@@ -2,7 +2,6 @@
   <el-config-provider>
     <BaseHeader />
     <div class="text-red text-[28px] bold">
-      先从table运行起来为止
       <div></div>
     </div>
     <div class="flex main-container">

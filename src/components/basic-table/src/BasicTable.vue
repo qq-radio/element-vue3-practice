@@ -34,7 +34,8 @@ import type { Page } from "@/components/basic-pagination";
 import type { Slots } from "vue";
 
 import { DefaultPaginationSettings } from "@/settings/index";
-import { isFunction, isObject, cloneDeep } from "@/utils/is";
+import { isFunction, isObject } from "@/utils/is";
+import { cloneDeep } from "@/utils/object";
 
 import TableBody from "./components/TableBody.vue";
 import { BasicPagination } from "@/components/basic-pagination";
