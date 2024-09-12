@@ -15,22 +15,22 @@
         <el-button
           type="primary"
           @click="
-            dialogvisible = !dialogvisible;
-            dialogAction = 'add';
+            dialogvisible = !dialogvisible
+            dialogAction = 'add'
           "
           >新增</el-button
         ><el-button
           type="primary"
           @click="
-            dialogvisible = !dialogvisible;
-            dialogAction = 'edit';
+            dialogvisible = !dialogvisible
+            dialogAction = 'edit'
           "
           >编辑</el-button
         ><el-button
           type="primary"
           @click="
-            dialogvisible = !dialogvisible;
-            dialogAction = 'view';
+            dialogvisible = !dialogvisible
+            dialogAction = 'view'
           "
           >查看详情</el-button
         >
@@ -51,36 +51,41 @@
 </template>
 
 <script setup lang="ts">
-import type { DialogAction } from "@/components/basic-form-dialog";
+import type { DialogAction } from '@/components/basic-form-dialog'
 
-import { tableSchemas } from "./schemas/table";
-import { formSchemas } from "./schemas/form";
+// 活动设置
+import { tableSchemas } from './schemas/appoint-award-set-table'
+import { formSchemas } from './schemas/appoint-award-set-form'
 
-const importConfig = {};
+// // 活动明细设置
+// import {   tableSchemas } from "./schemas/appoint-award-detail-table";
+// import {   formSchemas } from "./schemas/appoint-award-detail-form";
 
-const exportConfig = {};
+const importConfig = {}
 
-const loadTableData = () => {};
+const exportConfig = {}
 
-const dialogvisible = ref(false);
-const dialogAction = ref<DialogAction>("add");
+const loadTableData = () => {}
+
+const dialogvisible = ref(false)
+const dialogAction = ref<DialogAction>('add')
 
 const formModel = ref({
-  status: "0",
-  name: "",
+  status: '0',
+  name: '',
   rate: 2,
   progress: 100,
   switch: true,
   time: new Date().toString(),
   endTime: [],
-  img: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-});
+  img: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+})
 
 const handleSubmit = (values: Recordable) => {
-  console.log("表单提交", values);
-};
+  console.log('表单提交', values)
+}
 
 const handleReset = () => {
-  console.log("重置表单", "handleReset");
-};
+  console.log('重置表单', 'handleReset')
+}
 </script>
