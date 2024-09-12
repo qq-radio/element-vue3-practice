@@ -12,8 +12,36 @@
           :method="loadTableData"
           autoLoad
         />
-        <BasicForm
+        <el-button
+          type="primary"
+          @click="
+            dialogvisible = !dialogvisible;
+            dialogAction = 'add';
+          "
+          >新增</el-button
+        ><el-button
+          type="primary"
+          @click="
+            dialogvisible = !dialogvisible;
+            dialogAction = 'edit';
+          "
+          >编辑</el-button
+        ><el-button
+          type="primary"
+          @click="
+            dialogvisible = !dialogvisible;
+            dialogAction = 'view';
+          "
+          >查看详情</el-button
+        >
+        <BasicFormDialog
+          v-model:visible="dialogvisible"
+          v-model="formModel"
+          :action="dialogAction"
           :schemas="formSchemas"
+          :formProps="{
+            labelWidth: '140px',
+          }"
           @submit="handleSubmit"
           @reset="handleReset"
         />
@@ -23,12 +51,19 @@
 </template>
 
 <script setup lang="ts">
+import type { DialogAction } from "@/components/basic-form-dialog";
+
 import { tableSchemas } from "./schemas/table";
 import { formSchemas } from "./schemas/form";
 
 const importConfig = {};
 
 const exportConfig = {};
+
+const loadTableData = () => {};
+
+const dialogvisible = ref(true);
+const dialogAction = ref<DialogAction>("add");
 
 const formModel = ref({
   status: "0",
@@ -40,8 +75,6 @@ const formModel = ref({
   endTime: [],
   img: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
 });
-
-const loadTableData = () => {};
 
 const handleSubmit = (values: Recordable) => {
   console.log("表单提交", values);

@@ -60,6 +60,7 @@ export interface BasicFormProps {
   model?: Recordable;
   schemas: FormSchema[];
   loading?: boolean;
+  disabled?: boolean;
 
   rowProps?: Partial<Mutable<RowProps>>;
   colProps?: Partial<Mutable<ColProps>>;

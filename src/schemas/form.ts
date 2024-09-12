@@ -2,7 +2,7 @@ import type { FormSchema } from "@/components/basic-form";
 
 export const formSchemas: FormSchema[] = [
   {
-    label: "名称",
+    label: "指定奖品中奖次数",
     prop: "name",
     component: "input",
     rules: [
@@ -138,6 +138,86 @@ export const formSchemas: FormSchema[] = [
   },
   {
     label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明",
+    prop: "desc",
+    component: "textarea",
+    componentProps: {
+      maxlength: 10,
+      showWordLimit: true,
+      autosize: { minRows: 2, maxRows: 4 },
+    },
+  },
+  {
+    label: "说明——最后一个",
     prop: "desc",
     component: "textarea",
     componentProps: {

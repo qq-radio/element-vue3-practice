@@ -6,57 +6,58 @@
     :label-suffix="labelSuffix"
     :model="formModel"
   >
-    <el-row v-bind="rowProps">
-      <template v-for="schemaItem in formSchema">
-        <template v-if="schemaItem.component === 'sub-title'">
-          <el-col :key="schemaItem.prop" class="mb-3 ml-8 font-bold text-lg">
-            {{ schemaItem.label }}
-          </el-col>
-        </template>
-        <template v-else>
-          <el-col
-            v-if="getVIf(schemaItem)"
-            v-bind="getColProps(schemaItem)"
-            :key="schemaItem.prop"
+    <el-row v-bind="rowProps" v-for="schemaItem in formSchema">
+      <template v-if="schemaItem.component === 'sub-title'">
+        <el-col :key="schemaItem.prop" class="mb-3 ml-8 font-bold text-lg">
+          {{ schemaItem.label }}
+        </el-col>
+      </template>
+      <template v-else>
+        <el-col
+          v-if="getVIf(schemaItem)"
+          v-bind="getColProps(schemaItem)"
+          :key="schemaItem.prop"
+        >
+          <el-form-item
+            v-bind="schemaItem.formItemProps"
+            :label="getLabel(schemaItem)"
+            :prop="schemaItem.prop"
+            :rules="schemaItem.rules"
           >
-            <el-form-item
-              v-bind="schemaItem.formItemProps"
-              :label="getLabel(schemaItem)"
-              :prop="schemaItem.prop"
-              :rules="schemaItem.rules"
-            >
-              <slot
-                v-if="schemaItem.slot"
-                :name="schemaItem.slot"
-                :model="formModel"
-                style="width: 100%"
-              />
-              <component
-                :is="getComponent(schemaItem.component)"
-                v-else
-                v-bind="schemaItem.componentProps"
-                v-model="formModel[schemaItem.prop]"
-                style="width: 100%"
-                @change="(...v: unknown[]) => onChange(v, schemaItem)"
-              />
-              <div v-if="getVIfMax(schemaItem)" style="text-align: right">
-                {{ getMaxLimitText(schemaItem) }}
-              </div>
-            </el-form-item>
-          </el-col>
-        </template>
+            <slot
+              v-if="schemaItem.slot"
+              :name="schemaItem.slot"
+              :model="formModel"
+              style="width: 100%"
+            />
+            <component
+              :is="getComponent(schemaItem.component)"
+              v-else
+              v-bind="schemaItem.componentProps"
+              v-model="formModel[schemaItem.prop]"
+              :disabled="disabled"
+              style="width: 100%"
+              @change="(...v: unknown[]) => onChange(v, schemaItem)"
+            />
+            <div v-if="getVIfMax(schemaItem)" style="text-align: right">
+              {{ getMaxLimitText(schemaItem) }}
+            </div>
+          </el-form-item>
+        </el-col>
       </template>
     </el-row>
-    <el-form-item v-if="hasFooter">
-      <slot name="footer" v-bind="{ handleReset, handleSubmit }">
-        <el-button v-if="hasReset" @click="handleReset">
-          {{ resetText }}
-        </el-button>
-        <el-button type="primary" :loading="loading" @click="handleSubmit">
-          {{ submitText }}
-        </el-button>
-      </slot>
-    </el-form-item>
+    <el-row v-bind="rowProps" v-if="hasFooter">
+      <el-col v-bind="getColProps()" key="form-buttons">
+        <slot name="footer" v-bind="{ handleReset, handleSubmit }">
+          <el-button v-if="hasReset" @click="handleReset">
+            {{ resetText }}
+          </el-button>
+          <el-button type="primary" :loading="loading" @click="handleSubmit">
+            {{ submitText }}
+          </el-button>
+        </slot>
+      </el-col>
+    </el-row>
   </el-form>
 </template>
 
@@ -83,12 +84,12 @@ const props = withDefaults(defineProps<BasicFormProps>(), {
   loading: false,
 
   rowProps: () => ({}),
-  colProps: () => ({ span: 13 }),
+  colProps: () => ({ span: 24 }),
   formItemProps: () => ({}),
 
   hasLabel: true,
   labelSuffix: ":",
-  labelWidth: "80px",
+  labelWidth: "100px",
   labelPosition: "left",
 
   hasFooter: true,
@@ -142,8 +143,8 @@ function getVIf(schemaItem: FormSchema) {
   }
 }
 
-function getColProps(schemaItem: FormSchema) {
-  return schemaItem.colProps || props.colProps;
+function getColProps(schemaItem?: FormSchema) {
+  return schemaItem?.colProps || props.colProps;
 }
 
 function getLabel(schemaItem: FormSchema) {
@@ -188,3 +189,13 @@ const handleSubmit = async () => {
   return false;
 };
 </script>
+
+<style lang="scss" scoped>
+:deep .el-row {
+  &:last-child {
+    .el-col {
+      text-align: right;
+    }
+  }
+}
+</style>
