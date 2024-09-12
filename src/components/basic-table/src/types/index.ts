@@ -31,14 +31,17 @@ export interface BasicTableProps {
   tableProps?: Partial<TableProps<unknown>>;
   paginationProps?: Partial<PaginationProps>;
 
-  hasSelection: boolean;
-  selectionColumnProps: Recordable;
+  hasSelection?: boolean;
+  selectionColumnProps?: Recordable;
 
-  hasIndex: boolean;
-  indexColumnProps: Recordable;
+  hasIndex?: boolean;
+  indexColumnProps?: Recordable;
 
-  hasExpand: boolean;
-  expandColumnProps: Recordable;
+  hasExpand?: boolean;
+  expandColumnProps?: Recordable;
+
+  importConfig?: Recordable;
+  exportConfig?: Recordable;
 }
 
 export interface BasicTableEmits {

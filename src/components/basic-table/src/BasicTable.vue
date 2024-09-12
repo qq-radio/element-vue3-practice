@@ -31,7 +31,6 @@
 <script lang="ts" setup>
 import type { BasicTableProps, BasicTableEmits } from "./types";
 import type { Page } from "@/components/basic-pagination";
-import type { Slots } from "vue";
 
 import { DefaultPaginationSettings } from "@/settings/index";
 import { isFunction, isObject } from "@/utils/is";
@@ -39,6 +38,7 @@ import { cloneDeep } from "@/utils/object";
 
 import TableBody from "./components/TableBody.vue";
 import { BasicPagination } from "@/components/basic-pagination";
+import { mockDatas } from "../mock";
 
 defineOptions({
   name: "BasicTable",
@@ -104,9 +104,13 @@ const formatResponse = (records: Recordable[]) =>
 
 const query = async () => {
   try {
+    tableDatas.value = mockDatas;
+
     if (!isFunction(props.request)) {
       return;
     }
+
+    tableDatas.value = mockDatas;
 
     isLoading.value = true;
 
