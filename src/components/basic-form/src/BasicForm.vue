@@ -6,10 +6,9 @@
     :label-suffix="labelSuffix"
     :model="formModel"
   >
-    {{ formModel }} ??
     <el-row v-bind="rowProps">
       <template v-for="schemaItem in formSchema">
-        <template v-if="schemaItem.component === 'title'">
+        <template v-if="schemaItem.component === 'sub-title'">
           <el-col :key="schemaItem.prop" class="mb-3 ml-8 font-bold text-lg">
             {{ schemaItem.label }}
           </el-col>
@@ -72,7 +71,6 @@ import type { FormInstance } from "element-plus";
 
 import { getComponent } from "./tools/component";
 import { isFunction, isUndefined } from "@/utils/is";
-import { merge } from "lodash-es";
 
 defineOptions({
   name: "BasicForm",
@@ -118,10 +116,6 @@ watchEffect(() => {
   formModel.value = getProps.value.model || {};
   defaultFormModel.value = setDefaultFormModel(getProps.value.schemas);
 });
-
-function setProps(props: Partial<BasicFormProps>) {
-  formProps.value = merge(unref(formProps) || {}, props);
-}
 
 function setDefaultFormModel(schemas: FormSchema[]) {
   return schemas.reduce(
@@ -193,16 +187,4 @@ const handleSubmit = async () => {
   }
   return false;
 };
-
-const formActionType: FormAction = {
-  setProps,
-};
-
-defineExpose({
-  ...formActionType,
-});
-
-onMounted(() => {
-  emits("register", formActionType);
-});
 </script>

@@ -12,7 +12,7 @@
           :method="loadTableData"
           autoLoad
         />
-        <BasicFormDialog
+        <BasicForm
           :schemas="formSchemas"
           @submit="handleSubmit"
           @reset="handleReset"

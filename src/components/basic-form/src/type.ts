@@ -5,8 +5,8 @@ import type {
   FormItemRule,
   FormValidateCallback,
   FormItemProp,
-  FormValidationResult,
 } from "element-plus";
+import type { Mutable } from "element-plus/es/utils";
 
 export type ElementPlusComponentType =
   | "input"
@@ -86,10 +86,10 @@ export interface BasicFormProps {
 
 export interface BasicFormEmits {
   (e: "register", actions: FormAction): void;
-  (e: "update:modelValue", values: Props["model"]): void;
-  (e: "change", e: unknown, schemaItem: FormSchema): void;
-  (e: "submit", values: Props["model"]): void;
-  (e: "reset", values: Props["model"]): void;
+  (e: "update:modelValue", values: Recordable): void;
+  (e: "change", v: unknown, schemaItem: FormSchema): void;
+  (e: "submit", values: Recordable): void;
+  (e: "reset", values: Recordable): void;
 }
 
 export interface FormAction {
@@ -109,7 +109,7 @@ export interface FormAction {
   validateField: (
     props?: Arrayable<FormItemProp> | undefined,
     callback?: FormValidateCallback | undefined
-  ) => FormValidationResult;
+  ) => void;
   resetFields: (props?: Arrayable<FormItemProp> | undefined) => void;
   clearValidate: (props?: Arrayable<FormItemProp> | undefined) => void;
   scrollToField: (prop: FormItemProp) => void;

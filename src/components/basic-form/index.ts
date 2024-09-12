@@ -1,5 +1,6 @@
 export * from "./src/type";
 
-export { useForm } from "./src/hooks/useForm";
+// hooks暂时用不了
+// export { useForm } from "./src/hooks/useForm";
 
 export { default as BasicForm } from "./src/BasicForm.vue";
