@@ -12,6 +12,7 @@ export type PageMap = {
 
 export interface BasicTableProps {
   schemas: TableSchema[];
+  data: Recordable[];
   tableDatas?: Array<Recordable>;
   request?: (params: Recordable) => Promise<{
     data: {
@@ -55,6 +56,7 @@ export interface BasicTableEmits {
 export type BasicTableBodyProps = Pick<
   BasicTableProps,
   | "schemas"
+  | "data"
   | "dataFormatter"
   | "tableProps"
   | "hasSelection"
@@ -65,7 +67,7 @@ export type BasicTableBodyProps = Pick<
   | "expandColumnProps"
 >;
 
-export type RenderType = string | VNode | JSX.Element | Component;
+export type RenderType = string | VNode | Component;
 
 export type DisplayType =
   | "img"

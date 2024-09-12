@@ -53,6 +53,8 @@ const props = withDefaults(defineProps<ColumnDisplayProps>(), {
 });
 
 const params = computed(() => {
+  console.log("props.column:", props.column);
+
   return {
     row: props.row || {},
     column: props.column,

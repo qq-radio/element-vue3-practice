@@ -62,7 +62,7 @@ const exportConfig = {};
 
 const loadTableData = () => {};
 
-const dialogvisible = ref(true);
+const dialogvisible = ref(false);
 const dialogAction = ref<DialogAction>("add");
 
 const formModel = ref({

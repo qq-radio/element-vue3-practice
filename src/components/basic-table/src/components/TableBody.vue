@@ -41,7 +41,7 @@
 
           <!--数据渲染栏  -->
           <template v-for="column in columns" :key="column.prop">
-            <TableColumn :column="column" />
+            <TableColumn :schema="column" />
           </template>
         </slot>
       </template>
@@ -78,7 +78,7 @@ const columns = ref<TableSchema[]>([]);
 const tableDatas = ref<TableSchema[]>([]);
 
 watchEffect(() => {
-  columns.value = props.schemas.filter((s) => s.visible === true);
+  columns.value = props.schemas.filter((s) => s.visible !== false);
   tableDatas.value = props.data;
 });
 </script>
