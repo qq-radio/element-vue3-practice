@@ -1,6 +1,3 @@
-import Pagination from './src/index.vue'
+export * from "./src/type";
 
-export type PlusPaginationInstance = InstanceType<typeof Pagination>
-export * from './src/types'
-
-export const BasicPagination = Pagination
+export { default as BasicPagination } from "./src/BasicPagination.vue";

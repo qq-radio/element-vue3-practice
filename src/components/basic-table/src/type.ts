@@ -3,7 +3,7 @@ import type { TableProps, PaginationProps, TableColumnCtx } from "element-plus";
 import type {
   BasicFormProps,
   FormSchema,
-} from "@/components/basic-form/src/types";
+} from "@/components/basic-form/src/type";
 import type { Page } from "@/components/basic-pagination";
 
 export type PageMap = {

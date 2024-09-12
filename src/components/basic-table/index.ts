@@ -1,5 +1,3 @@
-export * from './src/types'
+export * from "./src/type";
 
-// import { default as b } from './src/BasicTable.vue'
-
-// export const BasicTable = b
+export { default as BasicTable } from "./src/BasicTable.vue";

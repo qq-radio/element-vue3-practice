@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { BasicTableBodyProps, TableSchema } from "../types";
+import type { BasicTableBodyProps, TableSchema } from "../type";
 
 import TableColumn from "./TableColumn.vue";
 

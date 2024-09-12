@@ -1,4 +1,4 @@
-import type { DisplayType as ComponentType } from "../types";
+import type { DisplayType as ComponentType } from "../type";
 
 import { ElImage, ElLink, ElTag, ElProgress } from "element-plus";
 

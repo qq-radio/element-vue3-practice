@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TableSchema } from "../types";
+import type { TableSchema } from "../type";
 
 import TableColumnDisplay from "./TableColumnDisplay.vue";
 

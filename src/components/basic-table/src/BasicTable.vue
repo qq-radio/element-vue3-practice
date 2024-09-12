@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { BasicTableProps, BasicTableEmits } from "./types";
+import type { BasicTableProps, BasicTableEmits } from "./type";
 import type { Page } from "@/components/basic-pagination";
 
 import { DefaultPaginationSettings } from "@/settings/index";
@@ -38,7 +38,7 @@ import { cloneDeep } from "@/utils/object";
 
 import TableBody from "./components/TableBody.vue";
 import { BasicPagination } from "@/components/basic-pagination";
-import { mockDatas } from "../mock";
+import { mockDatas } from "@/mock/table";
 
 defineOptions({
   name: "BasicTable",

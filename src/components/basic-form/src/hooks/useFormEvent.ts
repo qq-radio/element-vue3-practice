@@ -1,4 +1,4 @@
-import type { BasicFormProps, FormSchema } from "../types";
+import type { BasicFormProps, FormSchema } from "../type";
 
 import {
   normalizeSchema,

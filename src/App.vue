@@ -3,7 +3,7 @@
     <BaseHeader />
     <div class="flex main-container">
       <BaseSide />
-      <div w="full" m="1.5" bg-white>
+      <div w="full" m="1.5">
         <BasicTable
           ref="basicTableRef"
           :importConfig="importConfig"
@@ -51,5 +51,3 @@ const handleReset = () => {
   console.log("重置表单", "handleReset");
 };
 </script>
-
-<style></style>

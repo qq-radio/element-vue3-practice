@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TableColumn, TableSchema } from "../types";
+import type { TableColumn, TableSchema } from "../type";
 
 import { getComponent } from "../tools/component";
 import { isFunction, isString } from "@/utils/is";

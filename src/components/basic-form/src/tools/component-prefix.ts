@@ -1,28 +1,28 @@
-import type { ComponentType } from '../types'
+import type { ComponentType } from "../type";
 
 function getPrefix(component: ComponentType) {
-  let prefix
+  let prefix;
   switch (component) {
-    case 'input':
-    case 'input-number':
-    case 'textarea':
-      prefix = '请输入'
-      break
-    case 'switch':
-    case 'radio-group':
-    case 'checkbox-group':
-    case 'select':
-    case 'tree-select':
-    case 'date-picker':
-    case 'time-picker':
-      prefix = '请选择'
-      break
+    case "input":
+    case "input-number":
+    case "textarea":
+      prefix = "请输入";
+      break;
+    case "switch":
+    case "radio-group":
+    case "checkbox-group":
+    case "select":
+    case "tree-select":
+    case "date-picker":
+    case "time-picker":
+      prefix = "请选择";
+      break;
     default:
-      prefix = '请输入'
-      break
+      prefix = "请输入";
+      break;
   }
 
-  return prefix
+  return prefix;
 }
 
-export { getPrefix }
+export { getPrefix };

@@ -1,7 +1,5 @@
-export * from './src/types'
+export * from "./src/type";
 
-export { useForm } from './src/hooks/useForm'
+export { useForm } from "./src/hooks/useForm";
 
-import { default as b } from './src/BasicForm.vue'
-
-export const BasicForm = b
+export { default as BasicForm } from "./src/BasicForm.vue";

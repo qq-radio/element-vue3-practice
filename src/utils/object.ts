@@ -4,7 +4,7 @@ export function merge(f: unknown, j) {
   return lodash.merge(f, j);
 }
 
-export function cloneDeep(f: unknown) {
+export function cloneDeep(f) {
   return lodash.cloneDeep(f);
 }
 

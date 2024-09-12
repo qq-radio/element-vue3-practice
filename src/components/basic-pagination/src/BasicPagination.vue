@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { BasicPaginationProps, BasicPaginationEmits, Page } from "./types";
+import type { BasicPaginationProps, BasicPaginationEmits, Page } from "./type";
 
 import { DefaultPaginationSettings } from "@/settings/index";
 
