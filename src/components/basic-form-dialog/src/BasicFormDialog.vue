@@ -10,8 +10,8 @@
   >
     <div class="dialog-content" :style="{ maxHeight: height + 'px' }">
       <BasicForm
-        v-model="formModel"
         ref="basicFormInstance"
+        v-model="formModel"
         v-bind="formProps"
         :schemas="schemas"
         :disabled="getDisabled"
@@ -41,55 +41,65 @@ import type {
   BasicFormDialogProps,
   BasicFormDialogEmits,
   DialogAction,
-} from "./type";
-import type { FormInstance } from "element-plus";
+} from './type'
+import type { FormInstance } from 'element-plus'
 
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watchEffect } from 'vue'
 
-import { BasicForm } from "@/components/basic-form";
+import { BasicForm } from '@/components/basic-form'
 
 defineOptions({
-  name: "BasicFormDialog",
-});
+  name: 'BasicFormDialog',
+})
 
 const props = withDefaults(defineProps<BasicFormDialogProps>(), {
   visible: false,
   disabled: false,
   loading: false,
-  action: "add",
-  height: 400,
+  action: 'add',
+  height: 760,
+  width: 800,
 
   modelValue: () => ({}),
   formProps: () => ({}),
-});
+})
 
-const emit = defineEmits<BasicFormDialogEmits>();
+const emit = defineEmits<BasicFormDialogEmits>()
 
 const titleMap: Record<DialogAction, string> = {
-  add: "新增",
-  edit: "编辑",
-  view: "查看详情",
-};
+  add: '新增',
+  edit: '编辑',
+  view: '查看详情',
+}
 
-const dialogVisible = ref(false);
+const dialogVisible = ref(false)
 const dialogTitle = computed(() => {
-  return props.title || titleMap[props.action];
-});
+  return props.title || titleMap[props.action]
+})
 
-const isView = computed(() => props.action === "view");
-const getDisabled = computed(() => props.disabled || isView.value);
+const isView = computed(() => props.action === 'view')
+const getDisabled = computed(() => props.disabled || isView.value)
 
-const basicFormInstance = ref<FormInstance>();
-const formModel = ref<Recordable>({});
+const basicFormInstance = ref<FormInstance>()
+const formModel = ref<Recordable>({})
 
 watchEffect(() => {
-  dialogVisible.value = props.visible;
-  formModel.value = props.modelValue;
-});
+  dialogVisible.value = props.visible
+  formModel.value = props.modelValue
+})
+
+watch(
+  () => dialogVisible.value,
+  (visible) => {
+    if (visible) {
+      basicFormInstance.value?.handleReset()
+    }
+  }
+)
 
 const handleCancel = () => {
-  emit("update:visible", false);
-};
+  emit('update:visible', false)
+}
 </script>
 
 <style lang="scss" scoped>

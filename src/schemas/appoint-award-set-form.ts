@@ -4,7 +4,7 @@ export const formSchemas: FormSchema[] = [
   {
     label: '指定开奖名称',
     prop: 'name',
-    component: 'input',
+    component: 'select',
     required: true,
   },
   {

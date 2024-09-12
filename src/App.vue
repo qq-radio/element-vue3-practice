@@ -11,35 +11,41 @@
           :schemas="tableSchemas"
           :method="loadTableData"
           autoLoad
-        />
-        <el-button
-          type="primary"
-          @click="
-            () => {
-              dialogvisible = !dialogvisible
-              dialogAction = 'add'
-            }
-          "
-          >新增</el-button
-        ><el-button
-          type="primary"
-          @click="
-            () => {
-              dialogvisible = !dialogvisible
-              dialogAction = 'edit'
-            }
-          "
-          >编辑</el-button
-        ><el-button
-          type="primary"
-          @click="
-            () => {
-              dialogvisible = !dialogvisible
-              dialogAction = 'view'
-            }
-          "
-          >查看详情</el-button
         >
+          <template #operation-before>
+            <el-button
+              type="primary"
+              @click="
+                () => {
+                  dialogvisible = !dialogvisible
+                  dialogAction = 'add'
+                }
+              "
+              >新增</el-button
+            >
+          </template>
+          <template #actions>
+            <el-button
+              type="primary"
+              @click="
+                () => {
+                  dialogvisible = !dialogvisible
+                  dialogAction = 'edit'
+                }
+              "
+              >编辑</el-button
+            ><el-button
+              type="primary"
+              @click="
+                () => {
+                  dialogvisible = !dialogvisible
+                  dialogAction = 'view'
+                }
+              "
+              >查看详情</el-button
+            >
+          </template>
+        </BasicTable>
         <BasicFormDialog
           v-model:visible="dialogvisible"
           v-model="formModel"
@@ -60,12 +66,12 @@
 import type { DialogAction } from '@/components/basic-form-dialog'
 
 // 活动设置
-import { tableSchemas } from './schemas/appoint-award-set-table'
-import { formSchemas } from './schemas/appoint-award-set-form'
+// import { tableSchemas } from './schemas/appoint-award-set-table'
+// import { formSchemas } from './schemas/appoint-award-set-form'
 
 // // 活动明细设置
-// import {   tableSchemas } from "./schemas/appoint-award-detail-table";
-// import {   formSchemas } from "./schemas/appoint-award-detail-form";
+import { tableSchemas } from './schemas/appoint-award-detail-table'
+import { formSchemas } from './schemas/appoint-award-detail-form'
 
 const importConfig = {}
 

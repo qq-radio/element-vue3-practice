@@ -58,27 +58,27 @@
 </template>
 
 <script lang="ts" setup>
-import type { BasicTableBodyProps, TableSchema } from "../type";
+import type { BasicTableBodyProps, TableSchema } from '../type'
 
-import TableColumn from "./TableColumn.vue";
+import TableColumn from './TableColumn.vue'
 
 defineOptions({
-  name: "TableBody",
+  name: 'TableBody',
   inheritAttrs: false,
-});
+})
 
 const props = withDefaults(defineProps<BasicTableBodyProps>(), {
   data: () => [],
   selectionColumnProps: () => ({}),
   indexColumnProps: () => ({}),
   expandColumnProps: () => ({}),
-});
+})
 
-const columns = ref<TableSchema[]>([]);
-const tableDatas = ref<TableSchema[]>([]);
+const columns = ref<TableSchema[]>([])
+const tableDatas = ref<TableSchema[]>([])
 
 watchEffect(() => {
-  columns.value = props.schemas.filter((s) => s.visible !== false);
-  tableDatas.value = props.data;
-});
+  columns.value = props.schemas.filter((s) => s.visible !== false)
+  tableDatas.value = props.data
+})
 </script>

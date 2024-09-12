@@ -9,6 +9,12 @@
       @search="onSearch"
       @reset="onReset"
     />
+    <div class="operation">
+      <slot name="operation-before" />
+      <el-button type="primary">导入</el-button>
+      <el-button type="primary">导出</el-button>
+      <slot name="operation-after" />
+    </div>
     <TableBody
       v-bind="tableProps"
       :schemas="tableSchemas"
@@ -52,8 +58,10 @@ const props = withDefaults(defineProps<BasicTableProps>(), {
   ellipsis: false,
   pageMap: () => DefaultPaginationSettings.default.pageMap,
   searchProps: () => ({
+    labelWidth: 120,
+    labelPosition: 'right',
     colProps: {
-      span: 10,
+      span: 8,
     },
   }),
   tableProps: () => ({}),

@@ -74,8 +74,8 @@ export type DisplayType = 'img' | 'link' | 'tag' | 'progress' | 'copy' | 'badge'
 export interface TableColumn extends TableColumnCtx<any> {}
 
 export interface TableSchema {
-  prop: string
-  label: string
+  prop?: string
+  label?: string
   width?: string | number
   visible?: boolean
   tooltip?: string
