@@ -15,22 +15,28 @@
         <el-button
           type="primary"
           @click="
-            dialogvisible = !dialogvisible
-            dialogAction = 'add'
+            () => {
+              dialogvisible = !dialogvisible
+              dialogAction = 'add'
+            }
           "
           >新增</el-button
         ><el-button
           type="primary"
           @click="
-            dialogvisible = !dialogvisible
-            dialogAction = 'edit'
+            () => {
+              dialogvisible = !dialogvisible
+              dialogAction = 'edit'
+            }
           "
           >编辑</el-button
         ><el-button
           type="primary"
           @click="
-            dialogvisible = !dialogvisible
-            dialogAction = 'view'
+            () => {
+              dialogvisible = !dialogvisible
+              dialogAction = 'view'
+            }
           "
           >查看详情</el-button
         >

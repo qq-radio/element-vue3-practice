@@ -6,18 +6,18 @@
     :label-suffix="labelSuffix"
     :model="formModel"
   >
-    <el-row v-bind="rowProps" v-for="schemaItem in formSchema">
+    <el-row
+      v-for="schemaItem in formSchema"
+      v-bind="rowProps"
+      :key="schemaItem.prop"
+    >
       <template v-if="schemaItem.component === 'sub-title'">
-        <el-col :key="schemaItem.prop" class="mb-3 ml-8 font-bold text-lg">
+        <el-col class="mb-3 ml-8 font-bold text-lg">
           {{ schemaItem.label }}
         </el-col>
       </template>
       <template v-else>
-        <el-col
-          v-if="getVIf(schemaItem)"
-          v-bind="getColProps(schemaItem)"
-          :key="schemaItem.prop"
-        >
+        <el-col v-if="getVIf(schemaItem)" v-bind="getColProps(schemaItem)">
           <el-form-item
             v-bind="schemaItem.formItemProps"
             :label="getLabel(schemaItem)"
@@ -46,7 +46,7 @@
         </el-col>
       </template>
     </el-row>
-    <el-row v-bind="rowProps" v-if="hasFooter">
+    <el-row v-if="hasFooter" v-bind="rowProps">
       <el-col v-bind="getColProps()" key="form-buttons">
         <slot name="footer" v-bind="{ handleReset, handleSubmit }">
           <el-button v-if="hasReset" @click="handleReset">
@@ -62,21 +62,16 @@
 </template>
 
 <script lang="ts" setup>
-import type {
-  BasicFormProps,
-  BasicFormEmits,
-  FormSchema,
-  FormAction,
-} from "./type";
-import type { FormInstance } from "element-plus";
+import type { BasicFormProps, BasicFormEmits, FormSchema } from './type'
+import type { FormInstance } from 'element-plus'
 
-import { getComponent } from "./tools/component";
-import { isFunction, isUndefined } from "@/utils/is";
+import { getComponent } from './tools/component'
+import { isFunction, isUndefined } from '@/utils/is'
 
 defineOptions({
-  name: "BasicForm",
+  name: 'BasicForm',
   inheritAttrs: false,
-});
+})
 
 const props = withDefaults(defineProps<BasicFormProps>(), {
   model: () => ({}),
@@ -88,35 +83,35 @@ const props = withDefaults(defineProps<BasicFormProps>(), {
   formItemProps: () => ({}),
 
   hasLabel: true,
-  labelSuffix: ":",
-  labelWidth: "100px",
-  labelPosition: "left",
+  labelSuffix: ':',
+  labelWidth: '100px',
+  labelPosition: 'left',
 
   hasFooter: true,
   hasReset: true,
-  resetText: "重置",
-  submitText: "提交",
+  resetText: '重置',
+  submitText: '提交',
 
   hasErrorTip: true,
-});
+})
 
-const emits = defineEmits<BasicFormEmits>();
+const emits = defineEmits<BasicFormEmits>()
 
-const formInstance = ref<FormInstance>();
-const formProps = ref<Partial<BasicFormProps>>();
-const formSchema = ref<FormSchema[]>([]);
-const formModel = ref<Recordable>({});
-const defaultFormModel = ref<Recordable>({});
+const formInstance = ref<FormInstance>()
+const formProps = ref<Partial<BasicFormProps>>()
+const formSchema = ref<FormSchema[]>([])
+const formModel = ref<Recordable>({})
+const defaultFormModel = ref<Recordable>({})
 
 const getProps = computed(() => {
-  return { ...props, ...unref(formProps) } as BasicFormProps;
-});
+  return { ...props, ...unref(formProps) } as BasicFormProps
+})
 
 watchEffect(() => {
-  formSchema.value = getProps.value.schemas;
-  formModel.value = getProps.value.model || {};
-  defaultFormModel.value = setDefaultFormModel(getProps.value.schemas);
-});
+  formSchema.value = getProps.value.schemas
+  formModel.value = getProps.value.model || {}
+  defaultFormModel.value = setDefaultFormModel(getProps.value.schemas)
+})
 
 function setDefaultFormModel(schemas: FormSchema[]) {
   return schemas.reduce(
@@ -128,66 +123,66 @@ function setDefaultFormModel(schemas: FormSchema[]) {
           }
         : acc,
     {}
-  );
+  )
 }
 
 function getVIf(schemaItem: FormSchema) {
-  const { vIf } = schemaItem;
+  const { vIf } = schemaItem
 
   if (isUndefined(vIf)) {
-    return true;
+    return true
   }
 
   if (isFunction(vIf)) {
-    return vIf(formModel.value, schemaItem);
+    return vIf(formModel.value, schemaItem)
   }
 }
 
 function getColProps(schemaItem?: FormSchema) {
-  return schemaItem?.colProps || props.colProps;
+  return schemaItem?.colProps || props.colProps
 }
 
 function getLabel(schemaItem: FormSchema) {
   const hasLabel = isUndefined(schemaItem.hasLabel)
     ? props.hasLabel
-    : schemaItem.hasLabel;
-  return hasLabel ? schemaItem.label : "";
+    : schemaItem.hasLabel
+  return hasLabel ? schemaItem.label : ''
 }
 
 function getVIfMax(schemaItem: FormSchema) {
   return (
-    (schemaItem.component === "input" || schemaItem.component === "textarea") &&
+    (schemaItem.component === 'input' || schemaItem.component === 'textarea') &&
     schemaItem.max
-  );
+  )
 }
 
 function getMaxLimitText(schemaItem: FormSchema) {
   return (
     ((formModel.value[schemaItem.prop] as string)?.length || 0) +
-    "/" +
+    '/' +
     schemaItem.max
-  );
+  )
 }
 
 const onChange = (e: unknown, schemaItem: FormSchema) => {
-  emits("change", e, schemaItem);
-};
+  emits('change', e, schemaItem)
+}
 
 const handleReset = () => {
-  formInstance.value?.clearValidate();
-};
+  formInstance.value?.clearValidate()
+}
 
 const handleSubmit = async () => {
   try {
-    const valid = await formInstance.value?.validate();
+    const valid = await formInstance.value?.validate()
     if (valid) {
-      emits("submit", formModel.value);
+      emits('submit', formModel.value)
     }
   } catch (error: unknown) {
-    console.error("表单提交错误", error);
+    console.error('表单提交错误', error)
   }
-  return false;
-};
+  return false
+}
 </script>
 
 <style lang="scss" scoped>
