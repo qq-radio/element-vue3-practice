@@ -9,7 +9,6 @@
     >
       <template #default>
         <slot name="default">
-          <!-- 选择栏 -->
           <el-table-column
             v-if="hasSelection"
             key="selection"
@@ -17,7 +16,6 @@
             v-bind="selectionColumnProps"
           />
 
-          <!-- 序号栏 -->
           <el-table-column
             v-if="hasIndex"
             key="index"
@@ -25,7 +23,6 @@
             v-bind="indexColumnProps"
           />
 
-          <!-- 展开栏 -->
           <el-table-column
             v-if="hasExpand"
             key="expand"
@@ -39,9 +36,29 @@
             </template>
           </el-table-column>
 
-          <!--数据渲染栏  -->
-          <template v-for="column in columns" :key="column.prop">
-            <TableColumn :schema="column" />
+          <template v-for="c in columns" :key="c.prop">
+            <el-table-column
+              v-if="c"
+              v-bind="c.columnProps"
+              :label="c.label"
+              :prop="c.prop"
+              :width="c.width || columnWidth"
+            >
+              <template #default="{ row, column, $index }">
+                <TableColumnDisplay
+                  type="default"
+                  v-bind="{ row, column, columnIndex: $index, schema: c }"
+                >
+                  <template
+                    v-for="slotName in Object.keys(getSlots)"
+                    :key="slotName"
+                    #[slotName]="scope"
+                  >
+                    <slot :name="slotName" v-bind="scope" />
+                  </template>
+                </TableColumnDisplay>
+              </template>
+            </el-table-column>
           </template>
         </slot>
       </template>
@@ -58,27 +75,29 @@
 </template>
 
 <script lang="ts" setup>
-import type { BasicTableBodyProps, TableSchema } from '../type'
+import type { BasicTableBodyProps, TableSchema } from "../type";
 
-import TableColumn from './TableColumn.vue'
+import TableColumnDisplay from "./TableColumnDisplay.vue";
 
 defineOptions({
-  name: 'TableBody',
+  name: "TableBody",
   inheritAttrs: false,
-})
+});
 
 const props = withDefaults(defineProps<BasicTableBodyProps>(), {
   data: () => [],
   selectionColumnProps: () => ({}),
   indexColumnProps: () => ({}),
   expandColumnProps: () => ({}),
-})
+});
 
-const columns = ref<TableSchema[]>([])
-const tableDatas = ref<TableSchema[]>([])
+const columns = ref<TableSchema[]>([]);
+const tableDatas = ref<TableSchema[]>([]);
 
 watchEffect(() => {
-  columns.value = props.schemas.filter((s) => s.visible !== false)
-  tableDatas.value = props.data
-})
+  columns.value = props.schemas.filter((s) => s.visible !== false);
+  tableDatas.value = props.data;
+});
+
+const getSlots = useSlots();
 </script>

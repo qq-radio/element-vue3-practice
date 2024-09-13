@@ -21,6 +21,22 @@ function addFormItemPlaceholder(formItem: FormSchema) {
   );
 }
 
+function addTimePickerPlaceholder(formItem: FormSchema) {
+  if (formItem.component !== "time-picker") {
+    return formItem;
+  }
+
+  return merge(
+    {
+      componentProps: {
+        startPlaceholder: "开始时间",
+        endPlaceholder: "结束时间",
+      },
+    },
+    formItem
+  );
+}
+
 function addFormItemAllowClear(formItem: FormSchema) {
   return merge(
     {
@@ -33,19 +49,19 @@ function addFormItemAllowClear(formItem: FormSchema) {
 }
 
 function addFormItemTimeFormat(formItem: FormSchema) {
-  if (formItem.component === "date-picker") {
-    return merge(
-      {
-        componentProps: {
-          format: formItem?.componentProps?.format || "YYYY-MM-DD",
-          valueFormat: formItem?.componentProps?.valueFormat || "YYYY-MM-DD",
-        },
-      },
-      formItem
-    );
+  if (formItem.component !== "date-picker") {
+    return formItem;
   }
 
-  return formItem;
+  return merge(
+    {
+      componentProps: {
+        format: formItem?.componentProps?.format || "YYYY-MM-DD",
+        valueFormat: formItem?.componentProps?.valueFormat || "YYYY-MM-DD",
+      },
+    },
+    formItem
+  );
 }
 
 function filterSchema(schema: FormSchema[]) {
@@ -59,6 +75,7 @@ function sortSchema(schema: FormSchema[]) {
 function normalizeSchemaItem(schemaItem: FormSchema) {
   return [
     addFormItemPlaceholder,
+    addTimePickerPlaceholder,
     addFormItemAllowClear,
     addFormItemTimeFormat,
     normalizeRule,

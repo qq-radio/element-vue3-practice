@@ -1,6 +1,4 @@
-import type { PaginationProps } from "element-plus";
-
-export interface BasicPaginationProps extends PaginationProps {
+export interface BasicPaginationProps {
   modelValue?: Page;
 }
 

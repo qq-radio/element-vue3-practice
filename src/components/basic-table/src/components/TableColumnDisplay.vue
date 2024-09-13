@@ -28,7 +28,7 @@
 import type { TableColumn, TableSchema } from "../type";
 
 import { getComponent } from "../tools/component";
-import { isFunction, isString } from "@/utils/is";
+import { isFunction, isString } from "lodash";
 
 import { QuestionFilled } from "@element-plus/icons-vue";
 
@@ -53,29 +53,24 @@ const props = withDefaults(defineProps<ColumnDisplayProps>(), {
 });
 
 const params = computed(() => {
-  console.log("props.column:", props.column);
-
   return {
     row: props.row || {},
     column: props.column,
     columnIndex: props.columnIndex,
     schema: props.schema,
-    value:
-      props.type === "header" && props.row
-        ? props.row[props.schema.prop]
-        : props.schema.label,
+    value: props.schema.prop && props.row ? props.row[props.schema.prop] : "",
   };
 });
 
 const formattedValue = computed(() => {
   if (isFunction(props.schema.formatter)) {
-    return props.schema.formatter(params.value);
+    return props.schema.formatter({ ...params.value });
   }
 
-  return params.value;
+  return params.value.value;
 });
 
 const displayComponent = computed(() =>
-  props.schema.displayType ? getComponent(props.schema.displayType) : "span"
+  props.schema.displayType ? getComponent(props.schema.displayType) : ""
 );
 </script>

@@ -1,0 +1,18 @@
+.basic-table {
+  &__search {
+    padding-bottom: 10px;
+  }
+
+  &__body {
+    a {
+      margin-right: 10px;
+      color: #409eff;
+    }
+  }
+
+  &__page {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+  }
+}

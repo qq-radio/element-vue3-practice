@@ -3,7 +3,7 @@
     v-bind="getAttrs"
     :current-page="page.currentPage"
     :page-size="page.pageSize"
-    :total="total"
+    :total="page.total"
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
   />
@@ -11,8 +11,6 @@
 
 <script lang="ts" setup>
 import type { BasicPaginationProps, BasicPaginationEmits, Page } from "./type";
-
-import { DefaultPaginationSettings } from "@/settings/index";
 
 defineOptions({
   name: "BasicPagination",
@@ -26,10 +24,13 @@ const props = withDefaults(defineProps<BasicPaginationProps>(), {
   }),
 });
 
-const emits = defineEmits<BasicPaginationEmits>();
+const emit = defineEmits<BasicPaginationEmits>();
 
 const getAttrs = computed(() => ({
-  ...DefaultPaginationSettings,
+  layout: "total, sizes, prev, pager, next, jumper",
+  pageSizes: [10, 20, 30, 40, 50, 100, 200, 300, 400, 500],
+  currentPage: 1,
+  pageSize: 10,
   ...(useAttrs() || {}),
 }));
 
@@ -44,20 +45,20 @@ watchEffect(() => {
 });
 
 const handleEmit = () => {
-  emits("update:modelValue", page.value);
-  emits("change", page.value);
+  emit("update:modelValue", page.value);
+  emit("change", page.value);
 };
 
 const handleCurrentChange = (p: number) => {
   page.value.currentPage = p;
   handleEmit();
-  emits("current-change", p);
+  emit("current-change", p);
 };
 
 const handleSizeChange = (s: number) => {
   page.value.pageSize = s;
   page.value.currentPage = 1;
   handleEmit();
-  emits("size-change", s);
+  emit("size-change", s);
 };
 </script>

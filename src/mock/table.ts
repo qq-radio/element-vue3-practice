@@ -1,11 +1,16 @@
 export const mockDatas = [
   {
-    link: "111",
+    id: "这是第1个的id",
+    awardName: "111",
   },
   {
-    link: "2222",
+    id: "22222",
+    awardName: "2222",
+    status: 0,
   },
   {
-    link: "333333",
+    id: "333333",
+    awardName: "333333",
+    status: 1,
   },
 ];

@@ -32,12 +32,19 @@ export type CustomComponentType =
 
 export type ComponentType = ElementPlusComponentType | CustomComponentType;
 
+type TimeRangeMapFields = [string, string];
+
+export type ComponentProps = {
+  extraFields?: string[][];
+  timeRangeMapFields?: TimeRangeMapFields;
+} & Recordable;
+
 export interface FormSchema {
   label: string;
   prop: string;
   defaultValue?: string;
   component: ComponentType;
-  componentProps?: Recordable<unknown>;
+  componentProps?: ComponentProps;
   componentListeners?: Recordable<() => void>;
   slot?: string;
 
@@ -90,7 +97,7 @@ export interface BasicFormEmits {
   (e: "update:modelValue", values: Recordable): void;
   (e: "change", v: unknown, schemaItem: FormSchema): void;
   (e: "submit", values: Recordable): void;
-  (e: "reset", values: Recordable): void;
+  (e: "reset", values?: Recordable): void;
 }
 
 export interface FormAction {
