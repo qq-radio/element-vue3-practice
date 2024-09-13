@@ -14,8 +14,16 @@
       />
       <div>
         <slot name="operation-before" />
-        <el-button type="primary">导入</el-button>
-        <el-button type="primary">导出</el-button>
+        <BasicImport
+          v-if="isImportVisible"
+          :config="importConfig"
+          @success="reQuery"
+        />
+        <BasicExport
+          v-if="isExportVisible"
+          :config="exportConfig"
+          :params="exportParams"
+        />
         <slot name="operation-after" />
       </div>
     </div>
@@ -55,7 +63,7 @@
 import type { BasicTableProps, BasicTableEmits } from "./type";
 import type { Page } from "@/components/basic-pagination";
 
-import { isFunction, isObject, cloneDeep } from "lodash";
+import { isFunction, isObject, cloneDeep, isUndefined } from "lodash";
 
 import TableBody from "./components/TableBody.vue";
 import { BasicPagination } from "@/components/basic-pagination";
@@ -181,6 +189,19 @@ const onReset = () => {
   searchParams.value = {};
   reQuery();
 };
+
+const isImportVisible = computed(() => {
+  return isObject(props.importConfig);
+});
+
+const isExportVisible = computed(() => {
+  return isObject(props.exportConfig);
+});
+
+const exportParams = computed(() => ({
+  ...searchParams.value,
+  ...props.extraParams,
+}));
 </script>
 
 <style lang="scss">
