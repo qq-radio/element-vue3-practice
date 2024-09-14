@@ -170,7 +170,7 @@ function formatTime(time, formatType) {
   return dayjs(time).format(formatType);
 }
 
-function onTimeRangeChange(values: unknown, schemaItem: FormSchema) {
+function onTimeRangeChange(values: any, schemaItem: FormSchema) {
   const { componentProps: { timeRangeMapFields, format } = {} } = schemaItem;
 
   if (!isArray(timeRangeMapFields)) {
@@ -227,6 +227,7 @@ const handleSubmit = async () => {
 };
 
 defineExpose({
+  setFieldsValue,
   handleReset,
 });
 </script>

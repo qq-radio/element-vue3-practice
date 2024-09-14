@@ -1,15 +1,15 @@
 <template>
   <div class="basic-import">
-    <el-button type="primary" @click="upload.visible = true">
+    <el-button type="primary" @click="isUploadVisible = true">
       <el-icon><Upload /></el-icon><span>导入</span>
     </el-button>
     <el-dialog
-      v-model="upload.visible"
+      v-model="isUploadVisible"
       title="导入"
       width="650px"
       append-to-body
     >
-      <div>
+      <div class="basic-import-dialog__template">
         <span>下载模板：</span>
         <span style="color: #409eff" @click="downExcelTemplate">
           {{ config.templateName }}
@@ -22,7 +22,7 @@
         :limit="1"
         :headers="headers"
         :action="uploadAction"
-        :disabled="upload.isUploading"
+        :disabled="isUploading"
         :on-progress="handleUploadProgress"
         :on-success="handleUploadSuccess"
         :on-error="handleUploadError"
@@ -39,11 +39,8 @@
         只能导入xls、xlsx格式文件，不超过5MB，每次只能导入10000条数据。
       </div>
       <template #footer>
-        <el-button @click="upload.visible = false">取消</el-button>
-        <el-button
-          type="primary"
-          :loading="upload.isUploading"
-          @click="handleSubmit"
+        <el-button @click="isUploadVisible = false">取消</el-button>
+        <el-button type="primary" :loading="isUploading" @click="handleSubmit"
           >确定</el-button
         >
       </template>
@@ -70,15 +67,13 @@ const props = withDefaults(defineProps<BasicImportProps>(), {});
 
 const emit = defineEmits<BasicImportEmits>();
 
-const upload = reactive({
-  visible: true,
-  isUploading: false,
+const isUploadVisible = ref(false);
+const isUploading = ref(false);
 
+const uploadResult = reactive({
   fileUrl: "",
   fileName: "",
 });
-
-const errorData = ref([]);
 
 const headers = computed(() => ({
   // Authorization: "Bearer " + store.getters.access_token,
@@ -99,18 +94,18 @@ const downExcelTemplate = () => {
 };
 
 const handleUploadProgress = () => {
-  upload.isUploading = true;
+  isUploading.value = true;
 };
 
 const handleUploadError = (error) => {
   const message = JSON.parse(error.message);
   ElMessage.error((message && message.msg) || "上传失败");
-  upload.isUploading = true;
+  isUploading.value = true;
 };
 
 const handleUploadSuccess = (response) => {
   try {
-    upload.isUploading = false;
+    isUploading.value = false;
 
     if (response.code === 1) {
       ElMessage.error(response.msg || "上传失败");
@@ -134,16 +129,15 @@ const handleUploadSuccess = (response) => {
         customClass: "message-text",
       });
     }
-    upload.fileUrl = response.data.fileUrl;
-    upload.fileName = response.data.fileName;
+    uploadResult.fileUrl = { ...response.data };
   } catch (error) {}
 };
 
 const handleSubmit = async () => {
   try {
     const params = {
-      fileUrl: upload.fileUrl,
-      fileName: upload.fileName,
+      fileUrl: uploadResult.fileUrl,
+      fileName: uploadResult.fileName,
     };
 
     const response = await fileImport(params).then(() => {
@@ -157,12 +151,12 @@ const handleSubmit = async () => {
       ElMessage.success("导入成功");
       emit("success");
 
-      upload.visible = false;
+      isUploadVisible.value = false;
     });
   } catch (error: any) {
     ElMessage.error(error);
   } finally {
-    upload.isUploading = false;
+    isUploading.value = false;
   }
 };
 </script>

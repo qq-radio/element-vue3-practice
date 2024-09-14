@@ -1,10 +1,10 @@
-export interface Config {
+export interface ImportConfig {
   templateName: string;
   importUrl: string;
 }
 
 export interface BasicImportProps {
-  config?: Config;
+  config: ImportConfig;
   params?: Recordable;
 }
 

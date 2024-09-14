@@ -5,16 +5,23 @@ export const EFFECT_STATUS_ENUM = new Enum([
   ["NOT_EFFECT", 0, "未生效"],
   ["EFFECTED", 1, "生效"],
 ]);
-
+/**
+  *   <el-image
+      style="width: 100px; height: 100px"
+      :src="url"
+      :zoom-rate="1.2"
+      :max-scale="7"
+      :min-scale="0.2"
+      :preview-src-list="srcList"
+      :initial-index="4"
+      fit="cover"
+    />
+  */
 export const tableSchemas: TableSchema[] = [
   {
-    label: "奖品名称",
-    prop: "awardName",
-    searchConfig: {
-      label: "奖品名称",
-      prop: "awardName",
-      component: "input",
-    },
+    label: "图片有没有显示？？？？",
+    prop: "disImage",
+    displayType: "img",
   },
   {
     label: "商户编码",
@@ -112,5 +119,6 @@ export const tableSchemas: TableSchema[] = [
     label: "操作",
     prop: "actions",
     slot: "actions",
+    width: 180,
   },
 ];

@@ -28,7 +28,6 @@
       </div>
     </div>
     <div class="basic-table__body">
-      ??? {{ ($attrs, props) }}
       <TableBody
         v-bind="{
           ...$attrs,
@@ -63,12 +62,13 @@
 import type { BasicTableProps, BasicTableEmits } from "./type";
 import type { Page } from "@/components/basic-pagination";
 
-import { isFunction, isObject, cloneDeep, isUndefined } from "lodash";
+import { isFunction, isObject, cloneDeep } from "lodash";
 
 import TableBody from "./components/TableBody.vue";
 import { BasicPagination } from "@/components/basic-pagination";
 
 import { mockDatas } from "@/mock/table";
+import { FormSchema } from "@/components/basic-form";
 
 defineOptions({
   name: "BasicTable",
@@ -80,6 +80,7 @@ const props = withDefaults(defineProps<BasicTableProps>(), {
   immediate: true,
   loading: false,
   ellipsis: false,
+
   searchProps: () => ({
     labelWidth: 80,
     labelPosition: "left",
@@ -91,6 +92,14 @@ const props = withDefaults(defineProps<BasicTableProps>(), {
     columnWidth: 130,
   }),
   paginationProps: () => ({}),
+
+  importConfig: () => ({
+    templateName: "",
+    importUrl: "",
+  }),
+  exportConfig: () => ({
+    exportUrl: "",
+  }),
 });
 
 const emit = defineEmits<BasicTableEmits>();
@@ -98,9 +107,9 @@ const emit = defineEmits<BasicTableEmits>();
 const getSlots = useSlots();
 
 const searchSchemas = computed(() => {
-  return props.schemas
+  return (props.schemas
     .filter((item) => isObject(item.searchConfig))
-    .map((item) => item.searchConfig);
+    .map((item) => item.searchConfig) || []) as FormSchema[];
 });
 
 const searchParams = ref<Recordable>({});
@@ -140,7 +149,6 @@ const query = async () => {
     tableDatas.value = mockDatas;
     page.value.total = 100;
     const requestParams2 = getRequestParams();
-    console.log("requestParams2:", requestParams2);
 
     if (!isFunction(props.request)) {
       return;
@@ -183,13 +191,9 @@ const onReset = () => {
   reQuery();
 };
 
-const isImportVisible = computed(() => {
-  return isObject(props.importConfig);
-});
+const isImportVisible = computed(() => isObject(props.importConfig));
 
-const isExportVisible = computed(() => {
-  return isObject(props.exportConfig);
-});
+const isExportVisible = computed(() => isObject(props.exportConfig));
 
 const exportParams = computed(() => ({
   ...searchParams.value,

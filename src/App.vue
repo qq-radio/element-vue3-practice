@@ -61,11 +61,14 @@ import { tableSchemas } from "./schemas/appoint-award-detail-table";
 import { formSchemas } from "./schemas/appoint-award-detail-form";
 
 const importConfig = {
-  templateCode: "PIECE_INSPECTION_PRICE_IMPORT",
   templateName: "巡检单价表数据导入模板",
+  importUrl: "xxx",
 };
 
-const exportConfig = {};
+const exportConfig = {
+  fileName: "巡检单价表",
+  exportUrl: "xxxxxxxx",
+};
 
 const loadTableData = () => {};
 

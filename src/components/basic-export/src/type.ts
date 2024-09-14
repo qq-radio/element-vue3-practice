@@ -1,10 +1,10 @@
-export interface Config {
+export interface ExportConfig {
   fileName?: string;
   exportUrl: string;
 }
 
 export interface BasicExportProps {
-  config: Config;
+  config: ExportConfig;
   params: Recordable;
 }
 

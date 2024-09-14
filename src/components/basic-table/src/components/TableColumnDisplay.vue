@@ -13,7 +13,7 @@
     <component
       v-else-if="displayComponent"
       :is="displayComponent"
-      v-bind="params"
+      v-bind="displayProps"
     />
     <span v-else>
       {{ formattedValue }}
@@ -25,9 +25,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { TableColumn, TableSchema } from "../type";
+import type { ColumnDisplayProps, ColumnDisplayParams } from "../type";
 
 import { getComponent } from "../tools/component";
+import { normalizeComponentProps } from "../tools/component-props";
 import { isFunction, isString } from "lodash";
 
 import { QuestionFilled } from "@element-plus/icons-vue";
@@ -35,14 +36,6 @@ import { QuestionFilled } from "@element-plus/icons-vue";
 defineOptions({
   name: "TableColumnDisplay",
 });
-
-interface ColumnDisplayProps {
-  type: "header" | "default";
-  row?: Recordable;
-  column: TableColumn;
-  columnIndex: number;
-  schema: TableSchema;
-}
 
 const props = withDefaults(defineProps<ColumnDisplayProps>(), {
   type: "default",
@@ -52,7 +45,7 @@ const props = withDefaults(defineProps<ColumnDisplayProps>(), {
   }),
 });
 
-const params = computed(() => {
+const params = computed<ColumnDisplayParams>(() => {
   return {
     row: props.row || {},
     column: props.column,
@@ -72,5 +65,13 @@ const formattedValue = computed(() => {
 
 const displayComponent = computed(() =>
   props.schema.displayType ? getComponent(props.schema.displayType) : ""
+);
+
+const displayProps = computed(() =>
+  props.schema.displayType
+    ? normalizeComponentProps(props.schema.displayType, formattedValue.value, {
+        ...params.value,
+      })
+    : {}
 );
 </script>

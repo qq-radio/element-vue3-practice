@@ -5,8 +5,8 @@ import type {
   FormSchema,
 } from "@/components/basic-form/src/type";
 import type { Page } from "@/components/basic-pagination";
-import type { BasicImportProps } from "@/components/basic-import";
-import type { BasicExportProps } from "@/components/basic-export";
+import type { ImportConfig } from "@/components/basic-import";
+import type { ExportConfig } from "@/components/basic-export";
 
 export type PageMap = {
   [K in keyof Pick<Page, "pageSize" | "currentPage">]: string;
@@ -42,8 +42,8 @@ export interface BasicTableProps {
   hasExpand?: boolean;
   expandColumnProps?: Recordable;
 
-  importConfig: Pick<BasicImportProps, "config">;
-  exportConfig?: Pick<BasicExportProps, "config">;
+  importConfig?: ImportConfig;
+  exportConfig?: ExportConfig;
 }
 
 export interface BasicTableEmits {
@@ -80,21 +80,13 @@ export type DisplayType =
 
 export interface TableColumn extends TableColumnCtx<any> {}
 
-export type FormatterParams = {
-  row: Recordable;
-  column: TableColumn;
-  columnIndex: number;
-  schema: TableSchema;
-  value: any;
-};
-
 export interface TableSchema {
   prop?: string;
   label?: string;
   width?: string | number;
   visible?: boolean;
   tooltip?: string;
-  formatter?: (params: FormatterParams) => string | VNode;
+  formatter?: (params: ColumnDisplayParams) => string | VNode;
 
   searchable?: boolean;
   searchConfig?: FormSchema;
@@ -113,4 +105,15 @@ export interface TableSchema {
 
   displayType?: DisplayType;
   displayProps?: Recordable;
+}
+
+export interface ColumnDisplayProps {
+  row?: Recordable;
+  column: TableColumn;
+  columnIndex: number;
+  schema: TableSchema;
+}
+
+export interface ColumnDisplayParams extends ColumnDisplayProps {
+  value: any;
 }
