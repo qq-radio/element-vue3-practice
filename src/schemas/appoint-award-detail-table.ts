@@ -1,23 +1,27 @@
 import { TableSchema } from "@/components/basic-table";
 import Enum from "@/utils/enum";
+import { mapObjectArrayFields } from "@/utils";
 
 export const EFFECT_STATUS_ENUM = new Enum([
   ["NOT_EFFECT", 0, "未生效"],
   ["EFFECTED", 1, "生效"],
 ]);
-/**
-  *   <el-image
-      style="width: 100px; height: 100px"
-      :src="url"
-      :zoom-rate="1.2"
-      :max-scale="7"
-      :min-scale="0.2"
-      :preview-src-list="srcList"
-      :initial-index="4"
-      fit="cover"
-    />
-  */
+
 export const tableSchemas: TableSchema[] = [
+  {
+    label: "状态",
+    prop: "status",
+    searchConfig: {
+      label: "状态",
+      prop: "status",
+      component: "select",
+      componentProps: {
+        options: mapObjectArrayFields(EFFECT_STATUS_ENUM.getList(), {
+          label: "text",
+        }),
+      },
+    },
+  },
   {
     label: "图片有没有显示？？？？",
     prop: "disImage",
