@@ -43,7 +43,6 @@ import type {
   BasicFormDialogEmits,
   DialogAction,
 } from "./type";
-import type { FormInstance } from "element-plus";
 
 import { ref, computed, watchEffect } from "vue";
 
@@ -102,12 +101,13 @@ const handleCancel = () => {
   emit("update:visible", false);
 };
 
-const simulate = () => {
-  basicFormInstance.value?.setFieldsValue({
-    awardName: "应该是可以的",
-  });
-  console.log("simulate:");
+const setFormFieldsValue = (values: Recordable) => {
+  basicFormInstance.value?.setFieldsValue(values);
 };
+
+defineExpose({
+  setFormFieldsValue,
+});
 </script>
 
 <style lang="scss" scoped>
