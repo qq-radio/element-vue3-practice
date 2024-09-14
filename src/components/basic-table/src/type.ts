@@ -5,6 +5,8 @@ import type {
   FormSchema,
 } from "@/components/basic-form/src/type";
 import type { Page } from "@/components/basic-pagination";
+import type { BasicImportProps } from "@/components/basic-import";
+import type { BasicExportProps } from "@/components/basic-export";
 
 export type PageMap = {
   [K in keyof Pick<Page, "pageSize" | "currentPage">]: string;
@@ -40,8 +42,8 @@ export interface BasicTableProps {
   hasExpand?: boolean;
   expandColumnProps?: Recordable;
 
-  importConfig?: Recordable;
-  exportConfig?: Recordable;
+  importConfig: Pick<BasicImportProps, "config">;
+  exportConfig?: Pick<BasicExportProps, "config">;
 }
 
 export interface BasicTableEmits {

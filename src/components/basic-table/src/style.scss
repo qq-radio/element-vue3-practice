@@ -1,6 +1,9 @@
 .basic-table {
   &__search {
     padding-bottom: 10px;
+    .el-button {
+      margin: 0 6px;
+    }
   }
 
   &__body {

@@ -10,6 +10,6 @@ export interface BasicExportProps {
 
 export interface BasicExportEmits {
   (e: "success"): void;
-  (e: "fail", visible: boolean): void;
+  (e: "fail"): void;
   (e: "complete"): void;
 }

@@ -60,7 +60,10 @@ import type { DialogAction } from "@/components/basic-form-dialog";
 import { tableSchemas } from "./schemas/appoint-award-detail-table";
 import { formSchemas } from "./schemas/appoint-award-detail-form";
 
-const importConfig = {};
+const importConfig = {
+  templateCode: "PIECE_INSPECTION_PRICE_IMPORT",
+  templateName: "巡检单价表数据导入模板",
+};
 
 const exportConfig = {};
 
