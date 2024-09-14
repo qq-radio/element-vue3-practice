@@ -52,8 +52,8 @@
       <BasicPagination
         v-bind="paginationProps"
         v-model="page"
-        @current-change="onPageChange"
-        @size-change="onSizeChange"
+        @current-change="query"
+        @size-change="query"
       />
     </div>
   </div>
@@ -138,6 +138,9 @@ const formatRecords = (records: Recordable[]) =>
 const query = async () => {
   try {
     tableDatas.value = mockDatas;
+    page.value.total = 100;
+    const requestParams2 = getRequestParams();
+    console.log("requestParams2:", requestParams2);
 
     if (!isFunction(props.request)) {
       return;
@@ -153,7 +156,7 @@ const query = async () => {
     const { total, records } = response.data || {};
 
     tableDatas.value = formatRecords(records);
-    page.value.total = total;
+    page.value.total = 100;
   } catch (error: unknown) {
     console.log("error:", error);
   } finally {
@@ -169,16 +172,6 @@ const reQuery = () => {
 if (props.immediate || isFunction(props.request)) {
   query();
 }
-
-const onPageChange = (p: Page) => {
-  page.value.currentPage = p.currentPage;
-  query();
-};
-
-const onSizeChange = (p: Page) => {
-  page.value.pageSize = p.pageSize;
-  reQuery();
-};
 
 const onSearch = (params: Recordable) => {
   searchParams.value = params;

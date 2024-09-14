@@ -34,7 +34,7 @@
           </template>
         </BasicTable>
         <BasicFormDialog
-          v-model:visible="dialogvisible"
+          v-model:visible="dialogVisible"
           v-model="formModel"
           :action="dialogAction"
           :schemas="formSchemas"
@@ -66,10 +66,10 @@ const exportConfig = {};
 
 const loadTableData = () => {};
 
-const dialogvisible = ref(false);
+const dialogVisible = ref(false);
 
 const toggleDialogVisible = () => {
-  dialogvisible.value = !dialogvisible.value;
+  dialogVisible.value = !dialogVisible.value;
 };
 
 const openDialog = (action) => {

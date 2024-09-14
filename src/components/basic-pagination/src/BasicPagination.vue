@@ -51,14 +51,14 @@ const handleEmit = () => {
 
 const handleCurrentChange = (p: number) => {
   page.value.currentPage = p;
-  handleEmit();
   emit("current-change", p);
+  handleEmit();
 };
 
 const handleSizeChange = (s: number) => {
   page.value.pageSize = s;
   page.value.currentPage = 1;
-  handleEmit();
   emit("size-change", s);
+  handleEmit();
 };
 </script>
