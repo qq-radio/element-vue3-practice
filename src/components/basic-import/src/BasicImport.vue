@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button type="primary" @click="upload.open = true">导入</el-button>
     <el-dialog title="导入" v-model="upload.open" width="650px" append-to-body>
       <div class="template-download">
         <span>下载模板：</span>
