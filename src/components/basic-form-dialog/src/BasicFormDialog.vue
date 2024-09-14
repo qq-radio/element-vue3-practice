@@ -8,7 +8,6 @@
     :append-to-body="false"
     :before-close="handleCancel"
   >
-    <el-button type="primary" @click="simulate"> 模拟设置的动作 </el-button>
     <div class="dialog-content" :style="{ maxHeight: height + 'px' }">
       <BasicForm
         ref="basicFormInstance"
@@ -84,7 +83,7 @@ const basicFormInstance = ref<BasicFormInstance>();
 const formModel = ref<Recordable>({});
 
 watchEffect(() => {
-  dialogVisible.value = props.visible || true;
+  dialogVisible.value = props.visible;
   formModel.value = props.modelValue;
 });
 

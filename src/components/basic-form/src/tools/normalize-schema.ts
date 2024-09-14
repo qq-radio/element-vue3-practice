@@ -41,7 +41,7 @@ function addFormItemAllowClear(formItem: FormSchema) {
   return merge(
     {
       componentProps: {
-        allowClear: true,
+        clearable: true,
       },
     },
     formItem

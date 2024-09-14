@@ -2,7 +2,7 @@ import { FormSchema } from "@/components/basic-form";
 
 export const formSchemas: FormSchema[] = [
   {
-    label: "最后， 在这里模拟操作设置  奖品名称",
+    label: "奖品名称",
     prop: "awardName",
     component: "input",
     required: true,
@@ -22,7 +22,10 @@ export const formSchemas: FormSchema[] = [
   {
     label: "奖品数量",
     prop: "number",
-    component: "input",
+    component: "input-number",
+    componentProps: {
+      min: 0,
+    },
     required: true,
   },
   {
@@ -35,30 +38,45 @@ export const formSchemas: FormSchema[] = [
     label: "开奖开始时间",
     prop: "awardStartTime",
     component: "time-picker",
+    componentProps: {
+      format: "HH:mm:ss",
+    },
     required: true,
   },
   {
     label: "开奖结束时间",
     prop: "awardEndTime",
     component: "time-picker",
+    componentProps: {
+      format: "HH:mm:ss",
+    },
     required: true,
   },
   {
     label: "扫箱内码数量",
     prop: "boxInNumber",
     component: "input-number",
+    componentProps: {
+      min: 0,
+    },
     required: true,
   },
   {
     label: "扫箱码开始时间",
     prop: "boxInStartTime",
     component: "time-picker",
+    componentProps: {
+      format: "HH:mm:ss",
+    },
     required: true,
   },
   {
     label: "扫箱码结束时间",
     prop: "boxInEndTime",
     component: "time-picker",
+    componentProps: {
+      format: "HH:mm:ss",
+    },
     required: true,
   },
   {

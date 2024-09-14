@@ -215,6 +215,8 @@ const handleReset = () => {
 };
 
 const handleSubmit = async () => {
+  console.log("表单填写值", formModel.value);
+
   try {
     const valid = await formInstance.value?.validate();
     if (valid) {
